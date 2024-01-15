@@ -22,7 +22,7 @@ namespace PCConfig.View.Tabs.Products
             InitializeComponent();
 
             ProductsListViewModel model = new ProductsListViewModel(partType, parts);
-            model.ProductClicked += Model_ProductClicked; ;
+            model.ProductClicked += Model_ProductClicked;
             DataContext = model;
         }
 

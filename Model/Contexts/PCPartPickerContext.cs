@@ -12,7 +12,6 @@ using PCConfig.Model.PcPartPicker.Entities.Memory;
 using PCConfig.Model.PcPartPicker.Entities.Motherboard;
 using PCConfig.Model.PcPartPicker.Entities.PowerSupply;
 using PCConfig.Model.PcPartPicker.ShortViewData;
-using System.Net.Sockets;
 
 namespace PCConfig.Model.Contexts
 {
@@ -461,59 +460,24 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetCPUCoolerShortData()
         {
-            //var result = from p in Parts
-            //             where p.PartType == "cpu-cooler"
-
-            //             join cooler in CPUCoolers on p.Id equals cooler.PartId
-
-            //             join il in ImageLinks on p.Id equals il.PartId
-
-            //             join socket in CPUCoolerSockets on p.Id equals socket.PartId
-
-            //             group new { p, il, cooler, socket } by new
-            //             {
-            //                 p.Id,
-            //                 p.Link,
-            //                 p.Name,
-            //                 p.Manufacturer,
-            //                 p.PartType,
-            //                 p.Key
-            //             }
-            //             into grouped
-            //             select new PartShortData
-            //             {
-            //                 Part = new Part
-            //                 {
-            //                     Id = grouped.Key.Id,
-            //                     Name = grouped.Key.Name,
-            //                     Manufacturer = grouped.Key.Manufacturer,
-            //                     Link = grouped.Key.Link,
-            //                     PartType = grouped.Key.PartType,
-            //                     Key = grouped.Key.Key,
-            //                 },
-            //                 ImagesUrls = grouped.Select(x => x.il.Link).Where(x => x != null).ToList(),
-            //                 PartViewData = new CPUCoolerShortViewData
-            //                 {
-            //                     MinRpm = grouped.Select(x => x.cooler.MinRpm).FirstOrDefault(),
-            //                     MaxRpm = grouped.Select(x => x.cooler.MaxRpm).FirstOrDefault(),
-            //                     MinNoiseLevel = grouped.Select(x => x.cooler.MinNoiseLevel).FirstOrDefault(),
-            //                     MaxNoiseLevel = grouped.Select(x => x.cooler.MaxNoiseLevel).FirstOrDefault(),
-            //                     Socket = grouped.Select(x => x.socket.Socket).FirstOrDefault()
-            //                 }
-            //             }
-            //             into intermediateResult
-            //             select new PartShortData
-            //             {
-            //                 Part = intermediateResult.Part,
-            //                 ImagesUrls = intermediateResult.ImagesUrls.Distinct(),
-            //                 PartViewData = intermediateResult.PartViewData,
-            //                 Specifications = intermediateResult.PartViewData.GetSpecificationList()
-            //             };
-
             var result = Set<CpuCoolerResult>().FromSqlRaw("CALL get_cpu_cooler()").ToList();
             result = result.ToList();
 
-            return (IQueryable<PartShortData>)result.ToList();
+            IQueryable<PartShortData> parts = result.Select(g => new PartShortData
+            {
+                PartViewData = new CPUCoolerShortViewData
+                {
+                    MinRpm = g.MinRpm,
+                    MaxRpm = g.MaxRpm,
+                    MaxNoiseLevel = g.MaxNoiseLevel,
+                    MinNoiseLevel = g.MinNoiseLevel
+                },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).AsQueryable();
+
+            return parts;
         }
 
         public class CpuCoolerResult : PartViewData
@@ -560,8 +524,6 @@ namespace PCConfig.Model.Contexts
 
             public string ImageLinks { get; set; }
 
-            public string PartNumbers { get; set; }
-
             public string Sockets { get; set; }
 
             public int Id { get; set; }
@@ -580,11 +542,11 @@ namespace PCConfig.Model.Contexts
 
             public double? MaxNoiseLevel { get; set; }
 
-            public IEnumerable<ShortSpecification> Specifications { get; set; }
+            //public IEnumerable<ShortSpecification> Specifications { get; set; }
 
-            public PartViewData PartViewData { get; set; }
+            //public PartViewData PartViewData { get; set; }
 
-            public Part Part { get; set; }
+            //public Part Part { get; set; }
 
             //public CpuCoolerResult()
             //{
