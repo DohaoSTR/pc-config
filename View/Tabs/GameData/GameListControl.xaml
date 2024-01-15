@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="PCConfig.View.Tabs.GameListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PCConfig.View.Tabs"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="MainGrid">
+
+        <Border Background="Transparent"
+                CornerRadius="10"
+                Margin="0 0 0 0">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+                <ItemsControl Width="auto"
+                              Height="auto"
+                              IsTabStop="True"
+                              Focusable="False"
+                              ItemsSource="{Binding Games}"
+                              Margin="0 0 0 0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical">
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Background="#ffffff"
+                                    Margin="10"
+                                    Width="auto"
+                                    Height="auto"
+                                    BorderThickness="1"
+                                    BorderBrush="#ffffff"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding DataContext.GoToGameItemCommand, 
+                                            RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                    CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <Image Source="{Binding ImageSource}"
+                                           Width="100"
+                                           Height="100"/>
+                                    <StackPanel Margin="30 0 0 0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="Игра " 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#97989e" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 0 0"/>
+                                        <TextBlock Text="{Binding Name}"
+                                               FontSize="20" 
+                                               FontWeight="Medium"
+                                               Foreground="#121518"/>
+                                        
+                                        <TextBlock Text="Количество тестов " 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#97989e" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 0 0"/>
+                                        <TextBlock Text="{Binding Samples, StringFormat=N0}"
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

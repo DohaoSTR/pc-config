@@ -1,0 +1,33 @@
+﻿<Window x:Class="PCConfig.View.AccessWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PCConfig.View" 
+        xmlns:converters="clr-namespace:PCConfig.Model.Converters" 
+        xmlns:access="clr-namespace:PCConfig.ViewModel.Access"
+        d:DataContext="{d:DesignInstance Type=access:AccessControlManager}"
+        mc:Ignorable="d"
+        Style="{StaticResource StandardWindow}"
+        Title="{Binding Title}" 
+        Height="375"
+        Width="250"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <converters:ControlToUIElementConverter x:Key="ControlToUIElementConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="LightGray" Offset="0" />
+                    <GradientStop Color="DarkGray" Offset="1" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <ItemsControl ItemsSource="{Binding AccessControl, 
+        Converter={StaticResource ControlToUIElementConverter}}"/>
+    </Grid>
+</Window>

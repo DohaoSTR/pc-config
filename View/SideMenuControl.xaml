@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="PCConfig.View.SideMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PCConfig.View" 
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:converters="clr-namespace:PCConfig.Model.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             KeyboardNavigation.TabNavigation="None">
+    <Grid>
+        <icon:PackIconMaterial Kind="{Binding Kind}"
+                               Style="{StaticResource MenuButtonIcon}"
+                               Margin="25 15 0 0"
+                               VerticalAlignment="Top"
+                               Foreground="#d0c0ff"/>
+        <ListBoxItem x:Name="ListViewItemMenu" 
+                 Content="{Binding Text, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"
+                 Margin="21.5 2.75 0 0"
+                 VerticalAlignment="Top"
+                 FontSize="13"
+                 FontWeight="Bold"
+                 Foreground="#d0c0ff">
+        </ListBoxItem>
+        
+
+        <Expander x:Name="ExpanderMenu"
+                  IsExpanded="False" 
+                  Foreground="#d0c0ff"
+                  Width="325"  
+                  HorizontalAlignment="Right" 
+                  Background="Transparent"
+                  Focusable="False"
+                  IsTabStop="False">
+            <StackPanel>
+                <ItemsControl x:Name="ListViewMenu" 
+                          Margin="25 0 0 0"
+                          ItemsSource="{Binding SideMenuItems}" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          Focusable="False"
+                          IsTabStop="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Separator Height="1"
+                                       Background="#7e5fde"
+                                       Margin="10 0 20 0">
+                                </Separator>
+                                <Button Style="{StaticResource MenuButton}"
+                                    Command="{Binding DataContext.GoToMenuItemCommand, 
+                                              RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    CommandParameter="{Binding}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <icon:PackIconMaterial Kind="{Binding Kind}"
+                                                           Style="{StaticResource MenuButtonIcon}"
+                                                           Margin="10 0 0 0"/>
+
+                                        <TextBlock x:Name="MenuItemTextBlock"
+                                           Text="{Binding Text}"
+                                           Margin="10 0 10 0"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl>
