@@ -1,6 +1,6 @@
 ﻿namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class MotherboardShortViewData : PartViewData
+    public class MotherboardShortResult : PartViewData
     {
         public string? FormFactor { get; set; }
 
@@ -10,7 +10,7 @@
 
         public string? MemoryType { get; set; }
 
-        public string? Socket { get; set; }
+        public string? Sockets { get; set; }
 
         public int? PcieX16Slots { get; set; }
 
@@ -46,7 +46,7 @@
                 new ShortSpecification
                 {
                     Name = "Сокет",
-                    Value = Socket
+                    Value = Sockets
                 },
             };
 

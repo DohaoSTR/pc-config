@@ -1,6 +1,6 @@
 ﻿namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class CaseShortViewData : PartViewData
+    public class CaseShortResult : PartViewData
     {
         public string? HasPowerSupply { get; set; }
 
@@ -8,7 +8,7 @@
 
         public double? MaximumVideoCardLengthWith { get; set; }
 
-        public string? FrontUSB { get; set; }
+        public string? FrontUSBs { get; set; }
 
         public override IEnumerable<ShortSpecification> GetSpecificationList()
         {
@@ -33,7 +33,7 @@
                 new ShortSpecification
                 {
                     Name = "USB разъем",
-                    Value = FrontUSB
+                    Value = FrontUSBs
                 }
             };
 

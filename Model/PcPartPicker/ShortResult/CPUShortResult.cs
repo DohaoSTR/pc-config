@@ -2,7 +2,7 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class CPUShortViewData : PartViewData
+    public class CPUShortResult : PartViewData
     {
         public int? CoreCount { get; set; }
 

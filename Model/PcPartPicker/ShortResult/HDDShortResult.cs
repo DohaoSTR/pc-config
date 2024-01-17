@@ -2,8 +2,10 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class SSDShortViewData : PartViewData
+    public class HDDShortResult : PartViewData
     {
+        public double? SpindleSpeed { get; set; }
+
         public string? Interface { get; set; }
 
         public double? Cache { get; set; }
@@ -20,16 +22,14 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
             {
                 string stringValue = value.ToString();
 
-                if (value == "SATA 6.0 Gb/s")
-                {
-                    string[] parts = stringValue.Split(new[] { ' ' }, 3);
-
-                    return new Tuple<string, string?>(parts[0], parts[1]);
-                }
-                else
+                if (value == "PATA 100")
                 {
                     return new Tuple<string, string?>(stringValue, null);
                 }
+
+                string[] parts = stringValue.Split(new[] { ' ' }, 3);
+
+                return new Tuple<string, string?>(parts[0], parts[1]);
             }
 
             return null;
@@ -40,22 +40,36 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
             MeasureConverter measureConverter = new MeasureConverter();
             Tuple<string, string?> tuple = Parse(Interface);
 
+            string? interfaceName = null;
+            string? interfaceSpeed = null;
+            if (tuple != null)
+            {
+                interfaceName = tuple.Item1;
+                interfaceSpeed = tuple.Item2;
+            }
+
             var values = new List<ShortSpecification>
             {
                 new ShortSpecification
                 {
                     Name = "Интерфейс",
-                    Value = tuple.Item1
+                    Value = interfaceName
                 },
                 new ShortSpecification
                 {
                     Name = "Пропускная способность интерфейса",
-                    Value = tuple.Item2,
+                    Value = interfaceSpeed,
                     Measure = "Гбит/с"
                 },
                 new ShortSpecification
                 {
-                    Name = "Объем SSD",
+                    Name = "Скорость вращения шпинделя",
+                    Value = SpindleSpeed,
+                    Measure = "об/мин"
+                },
+                new ShortSpecification
+                {
+                    Name = "Объем HDD",
                     Value = Capacity,
                     Measure = measureConverter.Convert(CapacityMeasure, null, null, null).ToString()
                 },
@@ -64,7 +78,7 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
                     Name = "Объем кэш-памяти",
                     Value = Cache,
                     Measure = measureConverter.Convert(CacheMeasure, null, null, null).ToString()
-                },
+                }
             };
 
             return values;

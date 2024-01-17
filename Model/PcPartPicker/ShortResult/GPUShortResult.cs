@@ -1,6 +1,6 @@
 ﻿namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class GPUShortViewData : PartViewData
+    public class GPUShortResult : PartViewData
     {
         public string? MemoryType { get; set; }
 

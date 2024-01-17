@@ -2,7 +2,7 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class CaseFanShortViewData : PartViewData
+    public class CaseFanShortResult : PartViewData
     {
         public int? Quantity { get; set; }
 

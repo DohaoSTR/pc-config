@@ -10,7 +10,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
 {
     public class ProductsListItemViewModel : INotifyPropertyChanged
     {
-        private IEnumerable<string> _imagesUrls;
+        private readonly IEnumerable<string> _imagesUrls;
         public ObservableCollection<BitmapImage> Images
         {
             get
@@ -18,9 +18,13 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
                 ObservableCollection<BitmapImage> list = [];
                 foreach (string url in _imagesUrls)
                 {
-                    Uri imageUri = new(url, UriKind.Absolute);
-                    BitmapImage bitmapImage = new(imageUri);
-                    list.Add(bitmapImage);
+                    try
+                    {
+                        Uri imageUri = new(url, UriKind.Absolute);
+                        BitmapImage bitmapImage = new(imageUri);
+                        list.Add(bitmapImage);
+                    }
+                    catch (UriFormatException) { }
                 }
 
                 return list;
@@ -31,7 +35,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
         {
             get
             {
-                if (_imagesUrls.Count() == 0)
+                if (_imagesUrls?.Count() == 0 || _imagesUrls == null)
                 {
                     string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 

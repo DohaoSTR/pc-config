@@ -7,11 +7,20 @@ namespace PCConfig.View.Tabs.Products
     /// </summary>
     public partial class ProductItemControl : UserControl
     {
-        public event Action Backed;
+        public event Action<Type> Backed;
 
-        public ProductItemControl()
+        private Type _tabType;
+
+        public ProductItemControl(Type tabType)
         {
             InitializeComponent();
+
+            _tabType = tabType;
+        }
+
+        private void Back_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Backed?.Invoke(_tabType);
         }
     }
 }

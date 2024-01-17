@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Model\Configure\" />
-    <Folder Include="Model\PcPartPicker\LongViewData\" />
+    <Folder Include="Model\PcPartPicker\LongResult\" />
   </ItemGroup>
 
   <ItemGroup>

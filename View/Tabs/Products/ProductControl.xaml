@@ -96,6 +96,8 @@
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
@@ -116,11 +118,15 @@
                                            Width="100"
                                            Height="100"
                                            Grid.Column="2"/>
-                                        
+
+                                    <Rectangle Width="1" Fill="#dee4ec" 
+                                               Margin="10 0 0 5"
+                                               Grid.Column="3"/>
+                                    
                                     <StackPanel Margin="30 0 0 0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                Grid.Column="3">
+                                                Grid.Column="4">
                                         <TextBlock Text="Название " 
                                                FontSize="14" 
                                                FontWeight="SemiBold"
@@ -141,8 +147,12 @@
                                         </TextBlock>
                                     </StackPanel>
 
+                                    <Rectangle Width="1" Fill="#dee4ec" 
+                                               Margin="10 0 0 5"
+                                               Grid.Column="5"/>
+
                                     <ItemsControl ItemsSource="{Binding Specifications}"
-                                                  Grid.Column="4"
+                                                  Grid.Column="6"
                                                   Margin="30 0 0 0">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>

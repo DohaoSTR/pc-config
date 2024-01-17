@@ -218,8 +218,9 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
         }
 
         private IQueryable<PartShortData> _queryable;
+        private Type _strategyType;
 
-        public ProductsListViewModel(string partType, IQueryable<PartShortData> queryable)
+        public ProductsListViewModel(string partType, IQueryable<PartShortData> queryable, Type strategyType)
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -229,7 +230,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
 
             _currentPageIndex = 0;
             _itemsPerPage = 6;
-
+            _strategyType = strategyType;
             _queryable = queryable;
 
             List<PartShortData> parts = queryable.ToList();
@@ -252,11 +253,11 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products
 
         public ICommand GoToItemCommand => new RelayCommand<ProductsListItemViewModel>(GoToProductItem);
 
-        public event Action<ProductsListItemViewModel> ProductClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductClicked;
 
         private void GoToProductItem(ProductsListItemViewModel menuItem)
         {
-            ProductClicked?.Invoke(menuItem);
+            ProductClicked?.Invoke(menuItem, _strategyType);
         }
 
         #region INotifyPropertyChanged Implementation

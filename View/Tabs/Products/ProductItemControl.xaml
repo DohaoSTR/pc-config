@@ -3,10 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PCConfig.View.Tabs.Products"
+             xmlns:local="clr-namespace:PCConfig.View.Tabs.Products" 
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:converters="clr-namespace:PCConfig.Model.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <UserControl.Resources>
+        <converters:UserTypeConverter x:Key="UserTypeConverter" />
+        <converters:PageIndexConverter x:Key="PageIndexConverter" />
+        <converters:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter"/>
+        <converters:BooleanToForegroundConverter x:Key="BooleanToForegroundConverter"/>
+        <converters:GameSettingsConverter x:Key="GameSettingsConverter"/>
+        <converters:ResolutionConverter x:Key="ResolutionConverter"/>
+        <converters:NullToValueConverter x:Key="NullToValueConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="15 10 0 0"
+          x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <Border Background="#ffffff"
+                    Grid.Row="1"
+                    Margin="0 0 0 20"
+                    CornerRadius="10">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Click="Back_Click"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource PagingButton}"
+                            Grid.Column="4"
+                            Height="50">
+                        <icon:PackIconMaterial Kind="KeyboardReturn"
+                                       Style="{StaticResource PagingButtonIcon}">
+                            <icon:PackIconMaterial.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                            </icon:PackIconMaterial.LayoutTransform>
+                        </icon:PackIconMaterial>
+                    </Button>
+                </Grid>
+            </Border>
+        </StackPanel>
     </Grid>
 </UserControl>

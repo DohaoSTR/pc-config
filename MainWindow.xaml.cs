@@ -127,19 +127,19 @@ namespace PCConfig
             }
         }
 
-        private void ProductItemControl_Clicked(ProductsListItemViewModel model)
+        private void ProductItemControl_Clicked(ProductsListItemViewModel model, Type tabType)
         {
-            ProductItemControl control = new();
+            ProductItemControl control = new(tabType);
             control.Backed += ProductItemControl_Backed;
 
             MainSectionGrid.Children.Clear();
             MainSectionGrid.Children.Add(control);
         }
 
-        private void ProductItemControl_Backed()
+        private void ProductItemControl_Backed(Type tabType)
         {
-            //ISideMenuItem foundKey = FindKeyByValueType(_tabStrategies, typeof(GameDataTabStrategy));
-            //Item_IsSelectedPropertyChanged(foundKey, null);
+            ISideMenuItem foundKey = FindKeyByValueType(_tabStrategies, _parts, tabType);
+            Item_IsSelectedPropertyChanged(foundKey, null);
         }
 
         private void GameDataStrategy_Clicked(string gameName, int samples, string imageUrl)
@@ -151,15 +151,21 @@ namespace PCConfig
             MainSectionGrid.Children.Add(control);
         }
 
-        private static ISideMenuItem FindKeyByValueType(Dictionary<ISideMenuItem, ITabStrategy?> dictionary, Type targetType)
+        private static ISideMenuItem FindKeyByValueType(Dictionary<ISideMenuItem, ITabStrategy?> dictionary, Dictionary<ISideMenuItem, ITabStrategy?> parts, Type targetType)
         {
             KeyValuePair<ISideMenuItem, ITabStrategy?> foundItem = dictionary.FirstOrDefault(pair => pair.Value?.GetType() == targetType);
+
+            if (foundItem.Key is null)
+            {
+                foundItem = parts.FirstOrDefault(pair => pair.Value?.GetType() == targetType);
+            }
+
             return foundItem.Key;
         }
 
         private void GameDataStrategy_Backed()
         {
-            ISideMenuItem foundKey = FindKeyByValueType(_tabStrategies, typeof(GameDataTabStrategy));
+            ISideMenuItem foundKey = FindKeyByValueType(_tabStrategies, _parts, typeof(GameDataTabStrategy));
             Item_IsSelectedPropertyChanged(foundKey, null);
         }
 

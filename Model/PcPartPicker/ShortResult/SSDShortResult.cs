@@ -2,10 +2,8 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class HDDShortViewData : PartViewData
+    public class SSDShortResult : PartViewData
     {
-        public double? SpindleSpeed { get; set; }
-
         public string? Interface { get; set; }
 
         public double? Cache { get; set; }
@@ -22,14 +20,16 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
             {
                 string stringValue = value.ToString();
 
-                if (value == "PATA 100")
+                if (value == "SATA 6.0 Gb/s")
+                {
+                    string[] parts = stringValue.Split(new[] { ' ' }, 3);
+
+                    return new Tuple<string, string?>(parts[0], parts[1]);
+                }
+                else
                 {
                     return new Tuple<string, string?>(stringValue, null);
                 }
-
-                string[] parts = stringValue.Split(new[] { ' ' }, 3);
-
-                return new Tuple<string, string?>(parts[0], parts[1]);
             }
 
             return null;
@@ -55,13 +55,7 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
                 },
                 new ShortSpecification
                 {
-                    Name = "Скорость вращения шпинделя",
-                    Value = SpindleSpeed,
-                    Measure = "об/мин"
-                },
-                new ShortSpecification
-                {
-                    Name = "Объем HDD",
+                    Name = "Объем SSD",
                     Value = Capacity,
                     Measure = measureConverter.Convert(CapacityMeasure, null, null, null).ToString()
                 },
@@ -70,7 +64,7 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
                     Name = "Объем кэш-памяти",
                     Value = Cache,
                     Measure = measureConverter.Convert(CacheMeasure, null, null, null).ToString()
-                }
+                },
             };
 
             return values;

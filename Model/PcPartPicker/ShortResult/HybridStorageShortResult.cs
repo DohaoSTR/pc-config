@@ -2,7 +2,7 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class HybridStorageShortViewData : PartViewData
+    public class HybridStorageShortResult : PartViewData
     {
         public string? Interface { get; set; }
 

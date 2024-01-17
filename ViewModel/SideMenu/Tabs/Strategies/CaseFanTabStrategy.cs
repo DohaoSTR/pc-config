@@ -7,7 +7,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
 {
     public class CaseFanTabStrategy : ITabStrategy
     {
-        public event Action<ProductsListItemViewModel> ProductItemClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductItemClicked;
 
         public Control HandleTab(SideMenuItemViewModel item)
         {
@@ -16,7 +16,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
             string partType = "case-fan";
             var parts = context.GetCaseFanShortData();
 
-            ProductControl control = new ProductControl(partType, parts);
+            ProductControl control = new ProductControl(partType, parts, typeof(CaseFanTabStrategy));
             control.ProductClicked += ProductItemClicked;
 
             return control;

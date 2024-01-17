@@ -7,7 +7,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
 {
     public class SSDTabStrategy : ITabStrategy
     {
-        public event Action<ProductsListItemViewModel> ProductItemClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductItemClicked;
 
         public Control HandleTab(SideMenuItemViewModel item)
         {
@@ -16,7 +16,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
             string partType = "ssd";
             var parts = context.GetSSDShortData();
 
-            ProductControl control = new ProductControl(partType, parts);
+            ProductControl control = new ProductControl(partType, parts, typeof(SSDTabStrategy));
             control.ProductClicked += ProductItemClicked;
 
             return control;

@@ -1,6 +1,6 @@
 ﻿namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class PowerSupplyShortViewData : PartViewData
+    public class PowerSupplyShortResult : PartViewData
     {
         public double? Wattage { get; set; }
 

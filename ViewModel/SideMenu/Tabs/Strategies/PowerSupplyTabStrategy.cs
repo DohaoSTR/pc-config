@@ -7,7 +7,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
 {
     public class PowerSupplyTabStrategy : ITabStrategy
     {
-        public event Action<ProductsListItemViewModel> ProductItemClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductItemClicked;
 
         public Control HandleTab(SideMenuItemViewModel item)
         {
@@ -16,7 +16,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
             string partType = "power-supply";
             var parts = context.GetPowerSupplyShortData();
 
-            ProductControl control = new ProductControl(partType, parts);
+            ProductControl control = new ProductControl(partType, parts, typeof(PowerSupplyTabStrategy));
             control.ProductClicked += ProductItemClicked;
 
             return control;

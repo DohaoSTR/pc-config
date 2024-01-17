@@ -7,7 +7,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
 {
     public class CPUCoolerTabStrategy : ITabStrategy
     {
-        public event Action<ProductsListItemViewModel> ProductItemClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductItemClicked;
 
         public Control HandleTab(SideMenuItemViewModel item)
         {
@@ -16,7 +16,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
             string partType = "cpu-cooler";
             var parts = context.GetCPUCoolerShortData();
 
-            ProductControl control = new ProductControl(partType, parts);
+            ProductControl control = new ProductControl(partType, parts, typeof(CPUCoolerTabStrategy));
             control.ProductClicked += ProductItemClicked;
 
             return control;

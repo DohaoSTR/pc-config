@@ -1,10 +1,8 @@
-﻿using PCConfig.Model.Converters;
-
-namespace PCConfig.Model.PcPartPicker.ShortViewData
+﻿namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class CPUCoolerShortViewData : PartViewData
+    public class CPUCoolerShortResult : PartViewData
     {
-        public string? Socket { get; set; }
+        public string? Sockets { get; set; }
 
         public double? MinRpm { get; set; }
 
@@ -16,14 +14,12 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
 
         public override IEnumerable<ShortSpecification> GetSpecificationList()
         {
-            FanSizeConverter fanSizeConverter = new FanSizeConverter();
-
             var values = new List<ShortSpecification>
             {
                 new ShortSpecification
                 {
                     Name = "Сокет",
-                    Value = Socket
+                    Value = Sockets
                 },
                 new ShortSpecification
                 {

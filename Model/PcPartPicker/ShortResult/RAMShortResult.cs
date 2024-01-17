@@ -2,7 +2,7 @@
 
 namespace PCConfig.Model.PcPartPicker.ShortViewData
 {
-    public class RAMShortViewData : PartViewData
+    public class RAMShortResult : PartViewData
     {
         public int? MemorySpeed { get; set; }
 

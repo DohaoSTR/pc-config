@@ -15,20 +15,20 @@ namespace PCConfig.View.Tabs.Products
     /// </summary>
     public partial class ProductControl : UserControl
     {
-        public event Action<ProductsListItemViewModel> ProductClicked;
+        public event Action<ProductsListItemViewModel, Type> ProductClicked;
 
-        public ProductControl(string partType, IQueryable<PartShortData> parts)
+        public ProductControl(string partType, IQueryable<PartShortData> parts, Type strategyType)
         {
             InitializeComponent();
 
-            ProductsListViewModel model = new ProductsListViewModel(partType, parts);
+            ProductsListViewModel model = new ProductsListViewModel(partType, parts, strategyType);
             model.ProductClicked += Model_ProductClicked;
             DataContext = model;
         }
 
-        private void Model_ProductClicked(ProductsListItemViewModel obj)
+        private void Model_ProductClicked(ProductsListItemViewModel obj, Type type)
         {
-            ProductClicked?.Invoke(obj);
+            ProductClicked?.Invoke(obj, type);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
