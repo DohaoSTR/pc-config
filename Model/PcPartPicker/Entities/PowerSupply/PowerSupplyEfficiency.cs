@@ -10,6 +10,7 @@ namespace PCConfig.Model.PcPartPicker.Entities.PowerSupply
         public int Id { get; set; }
 
         [Required]
+        [Column("value")]
         public string Value { get; set; }
 
         [Column("part_id")]

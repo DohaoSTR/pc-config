@@ -10,40 +10,40 @@ namespace PCConfig.Model.PcPartPicker.Entities.Motherboard
         public int Id { get; set; }
 
         [Column("form_factor")]
-        public string FormFactor { get; set; }
+        public string? FormFactor { get; set; }
 
         [Column("chipset")]
-        public string Chipset { get; set; }
+        public string? Chipset { get; set; }
 
         [Column("memory_max")]
-        public int MemoryMax { get; set; }
+        public int? MemoryMax { get; set; }
 
         [Column("memory_type")]
-        public string MemoryType { get; set; }
+        public string? MemoryType { get; set; }
 
         [Column("memory_slots")]
-        public int MemorySlots { get; set; }
+        public int? MemorySlots { get; set; }
 
         [Column("color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
 
         [Column("supports_ecc")]
-        public string SupportsECC { get; set; }
+        public string? SupportsECC { get; set; }
 
         [Column("raid_support")]
-        public string RaidSupport { get; set; }
+        public string? RaidSupport { get; set; }
 
         [Column("model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Column("onboard_video")]
-        public string OnboardVideo { get; set; }
+        public string? OnboardVideo { get; set; }
 
         [Column("wifi_standard")]
-        public string WifiStandard { get; set; }
+        public string? WifiStandard { get; set; }
 
         [Column("network_adapter_speed")]
-        public double NetworkAdapterSpeed { get; set; }
+        public double? NetworkAdapterSpeed { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

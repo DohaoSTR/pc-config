@@ -13,40 +13,40 @@ namespace PCConfig.Model.PcPartPicker.Entities.InternalDrive
         public double? Capacity { get; set; }
 
         [Column("capacity_measure")]
-        public string CapacityMeasure { get; set; }
+        public string? CapacityMeasure { get; set; }
 
         [Column("price")]
         public double? Price { get; set; }
 
         [Column("price_measure")]
-        public string PriceMeasure { get; set; }
+        public string? PriceMeasure { get; set; }
 
         [Column("cache")]
         public double? Cache { get; set; }
 
         [Column("cache_measure")]
-        public string CacheMeasure { get; set; }
+        public string? CacheMeasure { get; set; }
 
         [Column("form_factor")]
-        public string FormFactor { get; set; }
+        public string? FormFactor { get; set; }
 
         [Column("interface")]
-        public string Interface { get; set; }
+        public string? Interface { get; set; }
 
         [Column("model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Column("power_loss_protection")]
-        public string PowerLossProtection { get; set; }
+        public string? PowerLossProtection { get; set; }
 
         [Column("nvme")]
-        public string Nvme { get; set; }
+        public string? NVME { get; set; }
 
         [Column("ssd_nand_flash_type")]
-        public string SsdNandFlashType { get; set; }
+        public string? SSDNandFlashType { get; set; }
 
         [Column("ssd_controller")]
-        public string SsdController { get; set; }
+        public string? SSDController { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

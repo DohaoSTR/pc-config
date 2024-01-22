@@ -10,13 +10,13 @@ namespace PCConfig.Model.PcPartPicker.Entities.GPU
         public int Id { get; set; }
 
         [Column("interface_name")]
-        public string InterfaceName { get; set; }
+        public string? InterfaceName { get; set; }
 
         [Column("interface_count")]
-        public int InterfaceCount { get; set; }
+        public int? InterfaceCount { get; set; }
 
         [Column("pin_count")]
-        public int PinCount { get; set; }
+        public int? PinCount { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

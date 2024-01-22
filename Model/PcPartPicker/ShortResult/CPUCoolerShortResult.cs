@@ -2,8 +2,6 @@
 {
     public class CPUCoolerShortResult : PartViewData
     {
-        public string? Sockets { get; set; }
-
         public double? MinRpm { get; set; }
 
         public double? MaxRpm { get; set; }
@@ -16,11 +14,6 @@
         {
             var values = new List<ShortSpecification>
             {
-                new ShortSpecification
-                {
-                    Name = "Сокет",
-                    Value = Sockets
-                },
                 new ShortSpecification
                 {
                     Name = "Максимальная скорость вращения",

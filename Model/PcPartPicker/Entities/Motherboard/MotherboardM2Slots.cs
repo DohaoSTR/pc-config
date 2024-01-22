@@ -10,13 +10,13 @@ namespace PCConfig.Model.PcPartPicker.Entities.Motherboard
         public int Id { get; set; }
 
         [Column("standard_size")]
-        public int StandardSize { get; set; }
+        public int? StandardSize { get; set; }
 
         [Column("key_name")]
-        public string KeyName { get; set; }
+        public string? KeyName { get; set; }
 
         [Column("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

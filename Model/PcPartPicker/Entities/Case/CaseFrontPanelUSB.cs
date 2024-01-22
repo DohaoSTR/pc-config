@@ -9,6 +9,7 @@ namespace PCConfig.Model.PcPartPicker.Entities.Case
         [Key]
         public int Id { get; set; }
 
+        [Column("value")]
         public string Value { get; set; }
 
         [Column("part_id")]

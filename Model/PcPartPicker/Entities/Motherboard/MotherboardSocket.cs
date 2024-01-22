@@ -10,10 +10,10 @@ namespace PCConfig.Model.PcPartPicker.Entities.Motherboard
         public int Id { get; set; }
 
         [Column("socket_count")]
-        public int SocketCount { get; set; }
+        public int? SocketCount { get; set; }
 
         [Column("socket_name")]
-        public string SocketName { get; set; }
+        public string? SocketName { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

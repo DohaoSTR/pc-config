@@ -10,13 +10,13 @@ namespace PCConfig.Model.Prices.DNS
         public int Id { get; set; }
 
         [Column("delivery_info")]
-        public string DeliveryInfo { get; set; }
+        public string? DeliveryInfo { get; set; }
 
         [Column("status")]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [Column("date_time")]
-        public DateTime DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
 
         [Column("city_name")]
         public string CityName { get; set; }

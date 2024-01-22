@@ -58,6 +58,13 @@ namespace PCConfig.Model.Contexts
             .HasConversion(new GameSettingsDatabaseConverter());
         }
 
+        public IEnumerable<Game> GetGames()
+        {
+            IEnumerable<Game> result = Games.Where(g => FPSDatas.Any(fd => fd.GameKey == g.Key));
+
+            return result.ToList();
+        }
+
         public IEnumerable<FPSDataWithModels> GetFPSDataByGameName(string gameName)
         {
             IEnumerable<FPSDataWithModels> result = from fps in FPSDatas

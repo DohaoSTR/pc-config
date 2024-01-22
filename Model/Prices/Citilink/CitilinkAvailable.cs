@@ -10,10 +10,10 @@ namespace PCConfig.Model.Prices.Citilink
         public int Id { get; set; }
 
         [Column("is_available")]
-        public bool IsAvailable { get; set; }
+        public bool? IsAvailable { get; set; }
 
         [Column("date_time")]
-        public DateTime DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
 
         [Column("city_name")]
         public string CityName { get; set; }

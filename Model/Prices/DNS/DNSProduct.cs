@@ -14,7 +14,7 @@ namespace PCConfig.Model.Prices.DNS
         public string Name { get; set; }
 
         [Column("part_number")]
-        public string PartNumber { get; set; }
+        public string? PartNumber { get; set; }
 
         [Column("link")]
         public string Link { get; set; }

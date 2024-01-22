@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using PCConfig.View.Tabs.Configurator;
+using System.Windows.Controls;
 
 namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
 {
@@ -6,7 +7,8 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Strategies
     {
         public Control HandleTab(SideMenuItemViewModel item)
         {
-            return new Control();
+            ConfiguratorControl control = new ConfiguratorControl();
+            return control;
         }
     }
 }

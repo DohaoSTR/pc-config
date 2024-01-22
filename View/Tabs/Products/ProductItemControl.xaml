@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PCConfig.View.Tabs.Products" 
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
-             xmlns:converters="clr-namespace:PCConfig.Model.Converters"
+             xmlns:converters="clr-namespace:PCConfig.Model.Converters" 
+             xmlns:local="clr-namespace:PCConfig.ViewModel.SideMenu.Tabs.Realizations.Products" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -16,6 +16,50 @@
         <converters:GameSettingsConverter x:Key="GameSettingsConverter"/>
         <converters:ResolutionConverter x:Key="ResolutionConverter"/>
         <converters:NullToValueConverter x:Key="NullToValueConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:AddColonConverter x:Key="AddColonConverter" />
+        <converters:NameToMarginConverter x:Key="NameToMarginConverter" />
+        <converters:DNSProductStatusConverter x:Key="DNSProductStatusConverter" />
+        <converters:BooleanToAvailableProductStringConverter x:Key="BooleanToAvailableProductStringConverter" />
+        
+        <DataTemplate x:Key="StandardSpecificationItem">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding Value, Converter={StaticResource NullToVisibilityConverter}}">
+                <TextBlock Text="{Binding Name, Converter={StaticResource AddColonConverter}}"
+                            FontSize="20" 
+                            FontWeight="SemiBold"
+                            Foreground="#97989e"
+                            Margin="0 0 5 10"/>
+                <TextBlock Text="{Binding Value}"
+                            FontSize="20" 
+                            FontWeight="Medium"
+                            Foreground="#121518"/>
+                <TextBlock Text="{Binding Measure}"
+                            Margin="5 0 0 0"
+                            FontSize="20" 
+                            FontWeight="Medium"
+                            Foreground="#97989e"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SpecificationCategory">
+            <StackPanel Orientation="Horizontal"
+                        Margin="{Binding Name, Converter={StaticResource NameToMarginConverter}}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{Binding Name}"
+                            FontSize="30" 
+                            FontWeight="SemiBold"
+                            Foreground="#121518"
+                            Margin="0 0 5 10"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <local:SpecificationItemTemplateSelector x:Key="SpecificationItemTemplateSelector"
+                                                 StandardSpecificationItem="{StaticResource StandardSpecificationItem}"
+                                                 SpecificationCategory="{StaticResource SpecificationCategory}" />
     </UserControl.Resources>
 
     <Grid Margin="15 10 0 0"
@@ -29,7 +73,7 @@
         <StackPanel Grid.Row="0">
             <Border Background="#ffffff"
                     Grid.Row="1"
-                    Margin="0 0 0 20"
+                    Margin="0 0 40 20"
                     CornerRadius="10">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
@@ -39,6 +83,24 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="15 10 0 10"
+                        Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Комплектующая" 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+                            <TextBlock Text="{Binding PartLongData.Part.Name}" 
+                                       FontSize="20" 
+                                       FontWeight="Medium"
+                                       Foreground="#121518" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+                        </StackPanel>
+                    </StackPanel>
 
                     <Button Click="Back_Click"
                             HorizontalAlignment="Right"
@@ -55,5 +117,364 @@
                 </Grid>
             </Border>
         </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <Border Background="#ffffff"
+                        Margin="0 0 20 20"
+                        CornerRadius="10">
+                    <ScrollViewer HorizontalAlignment="Center"
+                                  Margin="5"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding Images}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding}"
+                                           Width="auto"
+                                           Height="auto"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+                <Border Background="#ffffff"
+                        Grid.Row="0"
+                        Margin="0 0 20 20"
+                        CornerRadius="10">
+                    <StackPanel Margin="10 0 0 0">
+                        <StackPanel Margin="15 10 0 10"
+                                Orientation="Vertical">
+                            <TextBlock Text="Номер(а) производителя" 
+                                       FontSize="30 " 
+                                       FontWeight="SemiBold"
+                                       Foreground="#121518" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 10"/>
+                            <ItemsControl ItemsSource="{Binding PartLongData.PartNumbers}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Номер:"
+                                                    FontSize="20" 
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#121518"
+                                                    Margin="0 0 5 0"/>
+                                            <TextBlock Text="{Binding}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#97989e" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#ffffff"
+                        Grid.Row="0"
+                        Margin="0 0 20 20"
+                        CornerRadius="10"
+                        Visibility="{Binding PartLongData.DNSPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                    <StackPanel Margin="25 10 0 10"
+                                Orientation="Vertical">
+                        <TextBlock Text="DNS " 
+                                    FontSize="30" 
+                                    FontWeight="SemiBold"
+                                    Foreground="#121518" 
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 0 10"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Цена: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+                            <TextBlock Text="{Binding PartLongData.DNSPrice.Price}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+                            <TextBlock Text="руб. " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="5 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Данные актуальны на: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+
+                            <TextBlock Text="{Binding PartLongData.DNSPrice.DateTime}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ссылка: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+
+                            <TextBlock FontSize="20" 
+                                       FontWeight="Medium"
+                                       Foreground="#121518">
+                                            <Hyperlink NavigateUri="{Binding PartLongData.DNSLink}" 
+                                                       RequestNavigate="Hyperlink_RequestNavigate">
+                                                      <TextBlock Text="{Binding PartLongData.Part.Name}"
+                                                                  FontSize="20" 
+                                                                  FontWeight="Medium"
+                                                                  Foreground="#121518"/>
+                                            </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Margin="0 10 0 0">
+                            <ItemsControl ItemsSource="{Binding PartLongData.DNSAvailables}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0 10 0 0">
+                                            <TextBlock Text="{Binding CityName}"
+                                                   FontSize="20" 
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Наличие комплектующей: " 
+                                                          FontSize="20" 
+                                                          FontWeight="SemiBold"
+                                                          Foreground="#97989e" 
+                                                          VerticalAlignment="Center"
+                                                          Margin="0 0 0 0"/>
+
+                                                <TextBlock Text="{Binding Status, Converter={StaticResource DNSProductStatusConverter}}" 
+                                                           FontSize="20" 
+                                                           FontWeight="Medium"
+                                                           Foreground="#121518" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Данные актуальны на: " 
+                                                           FontSize="20" 
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#97989e" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+
+                                                <TextBlock FontSize="20" 
+                                                           FontWeight="Medium"
+                                                           Foreground="#121518">
+                                                    <TextBlock Text="{Binding DateTime}" 
+                                                               FontSize="20" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#121518" 
+                                                               VerticalAlignment="Center"
+                                                               Margin="0 0 0 0"/>
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0 0 0 0"
+                                                        Visibility="{Binding DeliveryInfo, Converter={StaticResource NullToVisibilityConverter}}">
+                                                <TextBlock Text="Доставка: " 
+                                                           FontSize="20" 
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#97989e" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+
+                                                <TextBlock Text="{Binding DeliveryInfo}" 
+                                                           FontSize="20" 
+                                                           FontWeight="Medium"
+                                                           Foreground="#121518" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#ffffff"
+                        Grid.Row="0"
+                        Margin="0 0 20 20"
+                        CornerRadius="10"
+                        Visibility="{Binding PartLongData.CitilinkPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                    <StackPanel Margin="25 10 0 10"
+                                Orientation="Vertical">
+                        <TextBlock Text="Citilink " 
+                                       FontSize="30" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#121518" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 10"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Цена: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+
+                            <TextBlock Text="{Binding PartLongData.CitilinkPrice.Price}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+
+                            <TextBlock Text="руб. " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="5 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Данные актуальны на: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+
+                            <TextBlock Text="{Binding PartLongData.CitilinkPrice.DateTime}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ссылка: " 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#97989e" 
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 0 0"/>
+
+                            <TextBlock FontSize="20" 
+                                       FontWeight="Medium"
+                                       Foreground="#121518">
+                                            <Hyperlink NavigateUri="{Binding PartLongData.CitilinkLink}" 
+                                                       RequestNavigate="Hyperlink_RequestNavigate">
+                                                      <TextBlock Text="{Binding PartLongData.Part.Name}"
+                                                                  FontSize="20" 
+                                                                  FontWeight="Medium"
+                                                                  Foreground="#121518"/>
+                                            </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Margin="0 10 0 0">
+                            <ItemsControl ItemsSource="{Binding PartLongData.CitilinkAvailables}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0 10 0 0">
+                                            <TextBlock Text="{Binding CityName}"
+                                                   FontSize="20" 
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#121518" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0 0 0 0"/>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Наличие комплектующей: " 
+                                                           FontSize="20" 
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#97989e" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+
+                                                <TextBlock Text="{Binding IsAvailable, Converter={StaticResource BooleanToAvailableProductStringConverter}}"
+                                                            FontSize="20" 
+                                                            FontWeight="Medium"
+                                                            Foreground="#121518" 
+                                                            VerticalAlignment="Center"
+                                                            Margin="0 0 0 0"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Данные актуальны на: " 
+                                                           FontSize="20" 
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#97989e" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 0 0"/>
+
+                                                <TextBlock Text="{Binding DateTime}" 
+                                                               FontSize="20" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#121518" 
+                                                               VerticalAlignment="Center"
+                                                               Margin="0 0 0 0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#ffffff"
+                        Grid.Row="0"
+                        Margin="0 0 20 20"
+                        CornerRadius="10">
+                    <ItemsControl ItemsSource="{Binding PartLongData.Specifications}"
+                                  ItemTemplateSelector="{StaticResource SpecificationItemTemplateSelector}"
+                                  Margin="25 10 0 10">
+                    </ItemsControl>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

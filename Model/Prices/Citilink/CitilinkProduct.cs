@@ -16,7 +16,7 @@ namespace PCConfig.Model.Prices.Citilink
         public string Link { get; set; }
 
         [Column("part_number")]
-        public string PartNumber { get; set; }
+        public string? PartNumber { get; set; }
 
         [Column("category")]
         public string Category { get; set; }

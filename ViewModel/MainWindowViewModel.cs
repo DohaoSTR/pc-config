@@ -45,12 +45,40 @@ namespace PCConfig.ViewModel
             }
         }
 
+        private ObservableCollection<string> _cityNames;
+        public ObservableCollection<string> CityNames
+        {
+            get
+            {
+                return _cityNames;
+            }
+        }
+
+        private string _currentCityName;
+        public string CurrentCityName
+        {
+            get
+            {
+                return _currentCityName;
+            }
+            set
+            {
+                _currentCityName = value;
+                OnPropertyChanged(nameof(CurrentCityName));
+
+                App.CityName = value;
+            }
+        }
+
         public event Action ExitButtonClicked;
 
         #endregion
 
         public MainWindowViewModel(IEnumerable<ISideMenuItem> menuItems)
         {
+            CurrentCityName = "Брянск";
+            _cityNames = new ObservableCollection<string> { "Брянск", "Москва", "Санкт-Петербург" };
+
             _upperSideMenuItems = new ObservableCollection<ISideMenuItem>(menuItems);
 
             _sideMenuItems = [];

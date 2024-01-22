@@ -10,12 +10,33 @@ using PCConfig.Model.PcPartPicker.Entities.InternalDrive;
 using PCConfig.Model.PcPartPicker.Entities.Memory;
 using PCConfig.Model.PcPartPicker.Entities.Motherboard;
 using PCConfig.Model.PcPartPicker.Entities.PowerSupply;
+using PCConfig.Model.PcPartPicker.LongResult;
+using PCConfig.Model.PcPartPicker.PriceResults;
 using PCConfig.Model.PcPartPicker.ShortViewData;
+using PCConfig.Model.Prices.Citilink;
+using PCConfig.Model.Prices.DNS;
 
 namespace PCConfig.Model.Contexts
 {
     public class PCPartPickerContext : ApplicationContext
     {
+        public DbSet<DNSAvailableResult> DNSAvailables { get; set; }
+        public DbSet<DNSPriceResult> DNSPrices { get; set; }
+        public DbSet<CitilinkAvailableResult> CitilinkAvailables { get; set; }
+        public DbSet<CitilinkPriceResult> CitilinkPrices { get; set; }
+
+        public DbSet<CPULongResult> CPULongData { get; set; }
+        public DbSet<GPULongResult> GPULongData { get; set; }
+        public DbSet<CPUCoolerLongResult> CPUCoolerLongData { get; set; }
+        public DbSet<MotherboardLongResult> MotherboardLongResult { get; set; }
+        public DbSet<RAMLongResult> RAMLongResult { get; set; }
+        public DbSet<CaseFanLongResult> CaseFanLongResult { get; set; }
+        public DbSet<CaseLongResult> CaseLongResult { get; set; }
+        public DbSet<PowerSupplyLongResult> PowerSupplyLongResult { get; set; }
+        public DbSet<SSDLongResult> SSDLongResult { get; set; }
+        public DbSet<HDDLongResult> HDDLongResult { get; set; }
+        public DbSet<HybridStorageLongResult> HybridStorageLongResult { get; set; }
+
         public DbSet<CPUShortResult> CPUShortData { get; set; }
         public DbSet<GPUShortResult> GPUShortData { get; set; }
         public DbSet<RAMShortResult> RAMShortData { get; set; }
@@ -91,18 +112,42 @@ namespace PCConfig.Model.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CPUCoolerShortResult>().HasNoKey();
+
+            modelBuilder.Entity<DNSAvailableResult>().HasNoKey();
+            modelBuilder.Entity<DNSPriceResult>().HasNoKey();
+            modelBuilder.Entity<CitilinkPriceResult>().HasNoKey();
+            modelBuilder.Entity<CitilinkAvailableResult>().HasNoKey();
         }
 
         public IQueryable<PartShortData> GetCPUShortData()
         {
-            var result = Set<CPUShortResult>().FromSqlRaw("CALL get_short_cpu()").ToList();
+            var result = Set<CPUShortResult>().FromSqlRaw($"CALL get_short_cpu('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
             }).AsQueryable();
 
             return parts;
@@ -110,14 +155,29 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetCPUCoolerShortData()
         {
-            var result = Set<CPUCoolerShortResult>().FromSqlRaw("CALL get_short_cpu_cooler()").ToList();
+            var result = Set<CPUCoolerShortResult>().FromSqlRaw($"CALL get_short_cpu_cooler('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink
             }).AsQueryable();
 
             return parts;
@@ -125,14 +185,33 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetGPUShortData()
         {
-            var result = Set<GPUShortResult>().FromSqlRaw("CALL get_short_gpu()").ToList();
+            var result = Set<GPUShortResult>().FromSqlRaw($"CALL get_short_gpu('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
             }).AsQueryable();
 
             return parts;
@@ -140,14 +219,33 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetRAMShortData()
         {
-            var result = Set<RAMShortResult>().FromSqlRaw("CALL get_short_ram()").ToList();
+            var result = Set<RAMShortResult>().FromSqlRaw($"CALL get_short_ram('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
             }).AsQueryable();
 
             return parts;
@@ -155,14 +253,29 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetMotherboardShortData()
         {
-            var result = Set<MotherboardShortResult>().FromSqlRaw("CALL get_short_motherboard()").ToList();
+            var result = Set<MotherboardShortResult>().FromSqlRaw($"CALL get_short_motherboard('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink
             }).AsQueryable();
 
             return parts;
@@ -170,14 +283,29 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetPowerSupplyShortData()
         {
-            var result = Set<PowerSupplyShortResult>().FromSqlRaw("CALL get_short_power_supply()").ToList();
+            var result = Set<PowerSupplyShortResult>().FromSqlRaw($"CALL get_short_power_supply('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
             }).AsQueryable();
 
             return parts;
@@ -185,14 +313,29 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetCaseShortData()
         {
-            var result = Set<CaseShortResult>().FromSqlRaw("CALL get_short_case()").ToList();
+            var result = Set<CaseShortResult>().FromSqlRaw($"CALL get_short_case('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink
             }).AsQueryable();
 
             return parts;
@@ -200,14 +343,29 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetCaseFanShortData()
         {
-            var result = Set<CaseFanShortResult>().FromSqlRaw("CALL get_short_case_fan()").ToList();
+            var result = Set<CaseFanShortResult>().FromSqlRaw($"CALL get_short_case_fan('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
             }).AsQueryable();
 
             return parts;
@@ -215,14 +373,33 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetHDDShortData()
         {
-            var result = Set<HDDShortResult>().FromSqlRaw("CALL get_short_hdd()").ToList();
+            var result = Set<HDDShortResult>().FromSqlRaw($"CALL get_short_hdd('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = "hdd" },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
             }).AsQueryable();
 
             return parts;
@@ -230,14 +407,33 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetSSDShortData()
         {
-            var result = Set<SSDShortResult>().FromSqlRaw("CALL get_short_ssd()").ToList();
+            var result = Set<SSDShortResult>().FromSqlRaw($"CALL get_short_ssd('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = "ssd" },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
             }).AsQueryable();
 
             return parts;
@@ -245,22 +441,416 @@ namespace PCConfig.Model.Contexts
 
         public IQueryable<PartShortData> GetHybridStorageShortData()
         {
-            var result = Set<HybridStorageShortResult>().FromSqlRaw("CALL get_short_hybrid_storage()").ToList();
+            var result = Set<HybridStorageShortResult>().FromSqlRaw($"CALL get_short_hybrid_storage('{App.CityName}')").ToList();
 
             IQueryable<PartShortData> parts = result.Select(g => new PartShortData
             {
                 PartViewData = g,
-                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name, PartType = g.PartType },
                 ImagesUrls = g.ImageLinks?.Split(",").ToList(),
-                Specifications = g.GetSpecificationList()
+                Specifications = g.GetSpecificationList(),
+
+                DNSAvailable = new DNSAvailable()
+                {
+                    CityName = App.CityName,
+                    DateTime = g.DNSAvailDateTime,
+                    DeliveryInfo = g.DNSDeilveryInfo,
+                    Status = g.DNSStatus
+                },
+                DNSPrice = new DNSPrice() { DateTime = g.DNSPriceDateTime, Price = g.DNSPrice },
+
+                CitilinkAvailable = new CitilinkAvailable() { CityName = App.CityName, DateTime = g.CitilinkAvailDateTime, IsAvailable = g.CitilinkIsAvailable },
+                CitilinkPrice = new CitilinkPrice() { DateTime = g.CitilinkPriceDateTime, Price = g.CitilinkPrice },
+
+                DNSLink = g.DNSLink,
+                CitilinkLink = g.CitilinkLink,
+
+                GamingPercentage = g.GamingPercentage,
+                DesktopPercentage = g.DesktopPercentage,
+                WorkstationPercentage = g.WorkstationPercentage
+
             }).AsQueryable();
 
             return parts;
         }
 
-        public IQueryable<PartLongData> Get()
+        //
+        public List<CitilinkAvailableResult> GetCitilinkAvailable(int id)
         {
-            return null;
+            List<CitilinkAvailableResult> result1 = Set<CitilinkAvailableResult>().FromSqlRaw($"CALL get_most_actual_citilink_available('{id}');").ToList();
+
+            return result1;
+        }
+
+        public CitilinkPriceResult GetCitilinkPrice(int id)
+        {
+            var result2 = Set<CitilinkPriceResult>().FromSqlRaw($"CALL get_most_actual_citilink_price('{id}');").ToList().FirstOrDefault();
+
+            return result2;
+        }
+
+        public string GetCitilinkLink(int id)
+        {
+            PricesContext pricesContext = new PricesContext();
+            CitilinkProduct result2 = pricesContext.CitilinkProducts.Where(x => x.Id == id).First();
+
+            return result2.Link;
+        }
+        //
+
+
+        //
+        public List<DNSAvailableResult> GetDNSAvailable(string uid)
+        {
+            var result1 = Set<DNSAvailableResult>().FromSqlRaw($"CALL get_most_actual_dns_available('{uid}');").ToList();
+
+            return result1;
+        }
+
+        public DNSPriceResult GetDNSPrice(string uid)
+        {
+            var result2 = Set<DNSPriceResult>().FromSqlRaw($"CALL get_most_actual_dns_price('{uid}');").ToList().FirstOrDefault();
+
+            return result2;
+        }
+
+        public string GetDNSLink(string uid)
+        {
+            PricesContext pricesContext = new PricesContext();
+            DNSProduct result2 = pricesContext.DNSProducts.Where(x => x.UID == uid).First();
+
+            return result2.Link;
+        }
+
+        //
+        public PartLongData GetCPULongData(int partId)
+        {
+            var result = Set<CPULongResult>().FromSqlRaw($"CALL get_long_cpu('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetGPULongData(int partId)
+        {
+            var result = Set<GPULongResult>().FromSqlRaw($"CALL get_long_gpu('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetRAMLongData(int partId)
+        {
+            var result = Set<RAMLongResult>().FromSqlRaw($"CALL get_long_ram('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetSSDLongData(int partId)
+        {
+            var result = Set<SSDLongResult>().FromSqlRaw($"CALL get_long_ssd('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetHDDLongData(int partId)
+        {
+            var result = Set<HDDLongResult>().FromSqlRaw($"CALL get_long_hdd('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetHybridStorageLongData(int partId)
+        {
+            var result = Set<HybridStorageLongResult>().FromSqlRaw($"CALL get_long_hybrid_storage('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetMotherboardLongData(int partId)
+        {
+            var result = Set<MotherboardLongResult>().FromSqlRaw($"CALL get_long_motherboard('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetCaseLongData(int partId)
+        {
+            var result = Set<CaseLongResult>().FromSqlRaw($"CALL get_long_case('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetCaseFanLongData(int partId)
+        {
+            var result = Set<CaseFanLongResult>().FromSqlRaw($"CALL get_long_case_fan('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetPowerSupplyLongData(int partId)
+        {
+            var result = Set<PowerSupplyLongResult>().FromSqlRaw($"CALL get_long_power_supply('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
+        }
+
+        public PartLongData GetCPUCoolerLongData(int partId)
+        {
+            var result = Set<CPUCoolerLongResult>().FromSqlRaw($"CALL get_long_cpu_cooler('{partId}');").ToList();
+
+            PartLongData part = result.Select(g => new PartLongData
+            {
+                PartViewData = g,
+                Part = new Part() { Id = g.Id, Link = g.Link, Manufacturer = g.Manufacturer, Name = g.Name },
+                ImagesUrls = g.ImageLinks?.Split(",").ToList(),
+                PartNumbers = g.PartNumbers?.Split(",").ToList(),
+                Specifications = g.GetSpecificationList()
+            }).First();
+
+            if (part.PartViewData.DNSUid != null)
+            {
+                part.DNSAvailables = GetDNSAvailable(part.PartViewData.DNSUid);
+                part.DNSPrice = GetDNSPrice(part.PartViewData.DNSUid);
+                part.DNSLink = GetDNSLink(part.PartViewData.DNSUid);
+            }
+
+            if (part.PartViewData.CitilinkId != null)
+            {
+                part.CitilinkAvailables = GetCitilinkAvailable((int)part.PartViewData.CitilinkId);
+                part.CitilinkPrice = GetCitilinkPrice((int)part.PartViewData.CitilinkId);
+                part.CitilinkLink = GetCitilinkLink((int)part.PartViewData.CitilinkId);
+            }
+
+            return part;
         }
     }
 }

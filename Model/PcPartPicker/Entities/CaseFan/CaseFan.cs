@@ -9,43 +9,50 @@ namespace PCConfig.Model.PcPartPicker.Entities.CaseFan
         [Key]
         public int Id { get; set; }
 
-        public string Model { get; set; }
+        [Column("model")]
+        public string? Model { get; set; }
 
-        public double Size { get; set; }
+        [Column("size")]
+        public double? Size { get; set; }
 
-        public string Color { get; set; }
+        [Column("color")]
+        public string? Color { get; set; }
 
-        public int Quantity { get; set; }
+        [Column("quantity")]
+        public int? Quantity { get; set; }
 
-        public string PWM { get; set; }
+        [Column("pwm")]
+        public string? PWM { get; set; }
 
-        public string LED { get; set; }
+        [Column("led")]
+        public string? LED { get; set; }
 
-        public string Controller { get; set; }
+        [Column("controller")]
+        public string? Controller { get; set; }
 
         [Column("static_pressure")]
-        public double StaticPressure { get; set; }
+        public double? StaticPressure { get; set; }
 
         [Column("bearing_type")]
-        public string BearingType { get; set; }
+        public string? BearingType { get; set; }
 
         [Column("min_rpm")]
-        public double MinRpm { get; set; }
+        public double? MinRpm { get; set; }
 
         [Column("max_rpm")]
-        public double MaxRpm { get; set; }
+        public double? MaxRpm { get; set; }
 
         [Column("min_airflow")]
-        public double MinAirflow { get; set; }
+        public double? MinAirflow { get; set; }
 
         [Column("max_airflow")]
-        public double MaxAirflow { get; set; }
+        public double? MaxAirflow { get; set; }
 
         [Column("min_noise_level")]
-        public double MinNoiseLevel { get; set; }
+        public double? MinNoiseLevel { get; set; }
 
         [Column("max_noise_level")]
-        public double MaxNoiseLevel { get; set; }
+        public double? MaxNoiseLevel { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

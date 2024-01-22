@@ -7,5 +7,6 @@ namespace PCConfig
     /// </summary>
     public partial class App : Application
     {
+        public static string CityName { get; set; }
     }
 }

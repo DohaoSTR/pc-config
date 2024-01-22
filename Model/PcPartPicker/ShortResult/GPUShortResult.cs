@@ -8,6 +8,14 @@
 
         public int? CoreClock { get; set; }
 
+
+        public int? GamingPercentage { get; set; }
+
+        public int? DesktopPercentage { get; set; }
+
+        public int? WorkstationPercentage { get; set; }
+
+
         public override IEnumerable<ShortSpecification> GetSpecificationList()
         {
             var values = new List<ShortSpecification>

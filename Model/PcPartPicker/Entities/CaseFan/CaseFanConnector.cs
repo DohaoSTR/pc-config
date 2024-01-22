@@ -10,18 +10,22 @@ namespace PCConfig.Model.PcPartPicker.Entities.CaseFan
         public int Id { get; set; }
 
         [Column("pin_count")]
-        public int PinCount { get; set; }
+        public int? PinCount { get; set; }
 
         [Column("volt_count")]
-        public int VoltCount { get; set; }
+        public int? VoltCount { get; set; }
 
-        public string RGB { get; set; }
+        [Column("rgb")]
+        public string? RGB { get; set; }
 
-        public string Proprietary { get; set; }
+        [Column("proprietary")]
+        public string? Proprietary { get; set; }
 
-        public string Addressable { get; set; }
+        [Column("addressable")]
+        public string? Addressable { get; set; }
 
-        public string PWM { get; set; }
+        [Column("pwm")]
+        public string? PWM { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

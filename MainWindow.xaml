@@ -6,6 +6,7 @@
         xmlns:customelements="clr-namespace:PCConfig.View" 
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
         xmlns:local="clr-namespace:PCConfig.ViewModel.SideMenu.Templates"
+        xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes" 
         mc:Ignorable="d"
         MinHeight="450" 
         MinWidth="800"
@@ -67,9 +68,20 @@
                     Grid.Column="0">
                     <Grid x:Name="TabsControl">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
+
+                        <ComboBox Margin="25 30 20 0"
+                                  ItemsSource="{Binding CityNames}"
+                                  SelectedItem="{Binding CurrentCityName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Foreground="#d0c0ff"
+                                  FontWeight="Medium"
+                                  Background="Transparent"
+                                  FontSize="14"
+                                  >
+                        </ComboBox>
 
                         <ScrollViewer CanContentScroll="True"
                                   HorizontalScrollBarVisibility="Auto" 
@@ -78,7 +90,7 @@
                                   Margin="0 30 0 0"
                                   IsTabStop="True"
                                   Focusable="False"
-                                  Grid.Row="0">
+                                  Grid.Row="1">
                             <ItemsControl Width="auto"
                                           Height="auto"
                                           IsTabStop="True"
@@ -93,7 +105,7 @@
                                 Margin="0 30 0 0"
                                 Width="auto"
                                 Height="auto"
-                                Grid.Row="1">
+                                Grid.Row="2">
                             <Separator Height="1"
                                    Background="#7e5fde"
                                    Margin="10 0 20 0"/>
@@ -130,13 +142,13 @@
                     Background="#623ed0">
                     <StackPanel Orientation="Horizontal">
                         <Button  Grid.Column="2"
-                             Grid.RowSpan="3"
-                             Height="auto"
-                             Style="{StaticResource CollapseMenuIconButton}"
-                             VerticalAlignment="Stretch"
-                             HorizontalAlignment="Stretch"
-                             Click="ToggleMenu"
-                             Foreground="#d0c0ff">
+                                 Grid.RowSpan="3"
+                                 Height="auto"
+                                 Style="{StaticResource CollapseMenuIconButton}"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 Click="ToggleMenu"
+                                 Foreground="#d0c0ff">
                             <icon:PackIconMaterial Kind="MenuRight" 
                                                Width="15" 
                                                Height="15"/>

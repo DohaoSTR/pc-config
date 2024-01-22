@@ -10,10 +10,10 @@ namespace PCConfig.Model.Prices.DNS
         public int Id { get; set; }
 
         [Column("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [Column("date_time")]
-        public DateTime DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
 
         [Column("product_id")]
         public string ProductId { get; set; }

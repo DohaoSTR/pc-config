@@ -13,7 +13,7 @@ namespace PCConfig.Model.Prices.Citilink
         public decimal? Price { get; set; }
 
         [Column("date_time")]
-        public DateTime DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
 
         [Column("product_id")]
         public int ProductId { get; set; }

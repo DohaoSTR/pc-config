@@ -9,28 +9,28 @@ namespace PCConfig.Model.PcPartPicker.Entities.PowerSupply
         public int Id { get; set; }
 
         [Column("model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Column("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [Column("efficiency_rating")]
-        public string EfficiencyRating { get; set; }
+        public string? EfficiencyRating { get; set; }
 
         [Column("wattage")]
-        public double Wattage { get; set; }
+        public double? Wattage { get; set; }
 
         [Column("length")]
-        public double Length { get; set; }
+        public double? Length { get; set; }
 
         [Column("modular")]
-        public string Modular { get; set; }
+        public string? Modular { get; set; }
 
         [Column("color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
 
         [Column("fan")]
-        public string Fan { get; set; }
+        public string? Fan { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

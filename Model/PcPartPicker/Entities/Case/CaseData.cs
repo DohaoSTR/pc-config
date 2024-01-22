@@ -18,27 +18,34 @@ namespace PCConfig.Model.PcPartPicker.Entities.Case
         [Column("maximum_video_card_length_without")]
         public double? MaximumVideoCardLengthWithout { get; set; }
 
-        public string Type { get; set; }
+        [Column("type")]
+        public string? Type { get; set; }
 
-        public string Color { get; set; }
+        [Column("color")]
+        public string? Color { get; set; }
 
         [Column("side_panel")]
-        public string SidePanel { get; set; }
+        public string? SidePanel { get; set; }
 
         [Column("has_power_supply")]
-        public string HasPowerSupply { get; set; }
+        public string? HasPowerSupply { get; set; }
 
         [Column("power_supply_shroud")]
-        public string PowerSupplyShroud { get; set; }
+        public string? PowerSupplyShroud { get; set; }
 
+        [Column("length")]
         public double? Length { get; set; }
 
+        [Column("width")]
         public double? Width { get; set; }
 
+        [Column("height")]
         public double? Height { get; set; }
 
-        public string Model { get; set; }
+        [Column("model")]
+        public string? Model { get; set; }
 
+        [Column("volume")]
         public double? Volume { get; set; }
 
         [Column("part_id")]

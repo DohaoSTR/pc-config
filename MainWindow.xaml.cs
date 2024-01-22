@@ -98,9 +98,8 @@ namespace PCConfig
             {
                 { new DropOutSideMenuItemViewModel("Комплектующие", "Grid", parts.Keys, SideMenuItemLocationType.Top), null },
                 { new SideMenuItemViewModel("Игровые данные", "ControllerClassic", SideMenuItemLocationType.Top), gameDataStrategy },
-                { new SideMenuItemViewModel("Аналитика рынка", "Poll", SideMenuItemLocationType.Top), new GenerationAssemblyTabStrategy() },
                 { new SideMenuItemViewModel("Конфигуратор", "Layers", SideMenuItemLocationType.Top), new ConfiguratorTabStrategy() },
-                { new SideMenuItemViewModel("Генерация сборки", "Cogs", SideMenuItemLocationType.Top), new GenerationAssemblyTabStrategy() },
+                { new SideMenuItemViewModel("Генерация ПК", "Cogs", SideMenuItemLocationType.Top), new GenerationAssemblyTabStrategy() },
                 { new SideMenuItemViewModel("Настройки аккаунта", "AccountBox", SideMenuItemLocationType.Bottom, true), accountStrategy }
             };
 
@@ -129,7 +128,7 @@ namespace PCConfig
 
         private void ProductItemControl_Clicked(ProductsListItemViewModel model, Type tabType)
         {
-            ProductItemControl control = new(tabType);
+            ProductItemControl control = new(tabType, model.Part.Id);
             control.Backed += ProductItemControl_Backed;
 
             MainSectionGrid.Children.Clear();

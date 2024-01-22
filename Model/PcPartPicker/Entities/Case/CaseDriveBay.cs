@@ -9,10 +9,13 @@ namespace PCConfig.Model.PcPartPicker.Entities.Case
         [Key]
         public int Id { get; set; }
 
+        [Column("count")]
         public int? Count { get; set; }
 
-        public string Type { get; set; }
+        [Column("type")]
+        public string? Type { get; set; }
 
+        [Column("format")]
         public double? Format { get; set; }
 
         [Column("part_id")]

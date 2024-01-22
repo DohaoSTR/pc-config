@@ -10,10 +10,10 @@ namespace PCConfig.Model.PcPartPicker.Entities
         public int Id { get; set; }
 
         [Column("merchant_link")]
-        public string MerchantLink { get; set; }
+        public string? MerchantLink { get; set; }
 
         [Column("merchant_name")]
-        public string MerchantName { get; set; }
+        public string? MerchantName { get; set; }
 
         [Column("base_price")]
         public double? BasePrice { get; set; }
@@ -22,16 +22,16 @@ namespace PCConfig.Model.PcPartPicker.Entities
         public double? PromoValue { get; set; }
 
         [Column("shipping_text")]
-        public string ShippingText { get; set; }
+        public string? ShippingText { get; set; }
 
         [Column("shipping_link")]
-        public string ShippingLink { get; set; }
+        public string? ShippingLink { get; set; }
 
         [Column("tax_value")]
         public double? TaxValue { get; set; }
 
         [Column("availability")]
-        public string Availability { get; set; }
+        public string? Availability { get; set; }
 
         [Column("final_price")]
         public double? FinalPrice { get; set; }

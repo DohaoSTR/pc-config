@@ -31,7 +31,7 @@ namespace PCConfig.Model.PcPartPicker.Entities.CPU
         public int? Lithography { get; set; }
 
         [Column("integrated_graphics")]
-        public string IntegratedGraphics { get; set; }
+        public string? IntegratedGraphics { get; set; }
 
         [Column("simultaneous_multithreading")]
         public string? SimultaneousMultithreading { get; set; }

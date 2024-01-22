@@ -1,0 +1,1394 @@
+﻿<UserControl x:Class="PCConfig.View.Tabs.GenerationModel.GenerationModelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:PCConfig.Model.Converters" 
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:UserTypeConverter x:Key="UserTypeConverter" />
+        <converters:PageIndexConverter x:Key="PageIndexConverter" />
+        <converters:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter"/>
+        <converters:BooleanToForegroundConverter x:Key="BooleanToForegroundConverter"/>
+        <converters:GameSettingsConverter x:Key="GameSettingsConverter"/>
+        <converters:ResolutionConverter x:Key="ResolutionConverter"/>
+        <converters:NullToValueConverter x:Key="NullToValueConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:AddColonConverter x:Key="AddColonConverter" />
+        <converters:NameToMarginConverter x:Key="NameToMarginConverter" />
+        <converters:GameSettingsToDisplayConverter x:Key="GameSettingsToDisplayConverter" />
+        <converters:ResolutionToDisplayConverter x:Key="ResolutionToDisplayConverter" />
+
+
+        <converters:DNSProductStatusShortViewConverter x:Key="DNSProductStatusShortViewConverter"/>
+        <converters:BooleanToAvailableShortViewDataConverter x:Key="BooleanToAvailableShortViewDataConverter"/>
+    </UserControl.Resources>
+
+    <!-- separator - td #9eb0c7-->
+    <!-- buttons - #623ed0-->
+    <ScrollViewer VerticalScrollBarVisibility="Visible"
+                  Margin="15 10 0 0">
+        <Grid x:Name="MainGrid"
+              Margin="0 0 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#ffffff"
+                    Grid.Row="0"
+                    CornerRadius="10"
+                    Visibility="{Binding SettingsPanelVisibility}">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding GenerateModel.Games}"
+                                  Margin="10"
+                                  Grid.Row="0"
+                                  Visibility="{Binding GamesPanelVisibility}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="250">
+                                    <CheckBox Content="{Binding Name}"
+                                              HorizontalContentAlignment="Left"
+                                              VerticalContentAlignment="Center"
+                                              Margin="0 5 0 0"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              FontWeight="Medium"
+                                              Background="#623ed0"
+                                              BorderBrush="#623ed0"
+                                              Padding="2.5 0 0 0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="10 0 20 10"
+                               Visibility="{Binding GamesPanelVisibility}"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding GamesPanelVisibility}">
+                        <Button Margin="10 0 10 0"
+                                Command="{Binding SelectAllGamesCommand}"
+                                Content="Выбрать все игры"
+                                Background="#623ed0"
+                                BorderBrush="#623ed0"/>
+                        <Button Margin="10 0 10 0"
+                                Content="Очистить"
+                                Command="{Binding ClearSelectionGamesCommand}"
+                                Background="#623ed0"
+                                BorderBrush="#623ed0"/>
+                    </StackPanel>
+
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="10 10 20 0"
+                               Visibility="{Binding GamesPanelVisibility}"/>
+                    
+                    <StackPanel Orientation="Horizontal"
+                                Margin="10 10 20 20"
+                                Visibility="{Binding GamesPanelVisibility}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Минимальный FPS"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.MinFPS}"
+                                         Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical"
+                                    Margin="20 0 0 0">
+                            <TextBlock Text="Средний FPS"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.AverageFPS}"
+                                         Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical"
+                                    Margin="20 0 0 0">
+                            <TextBlock Text="Максимальный FPS"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.MaxFPS}"
+                                         Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical"
+                                    Margin="20 0 0 0">
+                            <TextBlock Text="Игровые настройки"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <ComboBox ItemsSource="{Binding GameSettingValues}"
+                                      SelectedItem="{Binding GenerateModel.GameSettings}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      FontSize="16">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource GameSettingsToDisplayConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Vertical"
+                                    Margin="20 0 0 0">
+                            <TextBlock Text="Разрешение экрана"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <ComboBox ItemsSource="{Binding ResolutionValues}"
+                                      SelectedItem="{Binding GenerateModel.Resolution}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      FontSize="16">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource ResolutionToDisplayConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        
+                    </StackPanel>
+
+                    <Separator Height="1"
+                                Background="#9eb0c7"
+                                Margin="10 10 20 0"/>
+
+                    <Button Height="25"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Foreground="#7b5cd6"
+                            Margin="10 1 20 1"
+                            Command="{Binding ToggleGamesPanelVisibilityCommand}"
+                            Style="{StaticResource StandardCollapseIconButton}"
+                            >
+                        <icon:PackIconMaterial Kind="{Binding GamePanelIconKind}"
+                                               Width="15" 
+                                               Height="15"/>
+                    </Button>
+
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="10 0 20 10"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#ffffff"
+                    Grid.Row="1"
+                    CornerRadius="10"
+                    Margin="0 20 0 0"
+                    Visibility="{Binding SettingsPanelVisibility}">
+                <StackPanel Orientation="Vertical"
+                            Margin="10 10 10 30">
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 5">
+                        <TextBlock Text="Тип сборки"
+                                   Margin="0 0 0 0"
+                                   FontWeight="Medium"
+                                   FontSize="20"
+                                   VerticalAlignment="Center"/>
+
+                        <Button  Height="auto"
+                                 Margin="5 0 0 0"
+                                 Click="Button_Click"
+                                 Foreground="#6c7682"
+                                 Style="{StaticResource InfoButton}"
+                                 VerticalAlignment="Center">
+                            <icon:PackIconMaterial Kind="InformationOutline" 
+                                                   Width="20" 
+                                                   Style="{StaticResource InfoIcon}"
+                                                   Height="20"/>
+                        </Button>
+                        
+                        <Popup Name="infoPopup" Placement="Bottom" StaysOpen="False" IsOpen="False">
+                            <Border BorderBrush="Gray" 
+                                    BorderThickness="1" 
+                                    Background="White" 
+                                    Padding="5">
+                                <TextBlock MaxWidth="250"
+                                           Text="Заданный процент, означает то, насколько данная метрика соответствует вашим предпочтениям."
+                                           TextWrapping="Wrap"/>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 10"/>
+
+                    <Grid HorizontalAlignment="Left"
+                          VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Grid.Column="0">
+                            <Image x:Name="GameImage" 
+                                   Width="50"
+                                   Height="50"
+                                   Margin="0 0 10 0"/>
+                            <StackPanel>
+                                <TextBlock Text="Игровая метрика"
+                                           FontWeight="Medium"
+                                           FontSize="16"/>
+                                <TextBox Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"
+                                         wpf:TextFieldAssist.SuffixText="%"
+                                         Text="{Binding GenerateModel.GameMetric}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Margin="30 0 0 0">
+                            <Image x:Name="DesktopImage"
+                                   Width="50"
+                                   Height="50"
+                                   Margin="0 0 10 0"/>
+                            <StackPanel>
+                                <TextBlock Text="Стационарная метрика"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                                <TextBox Text="{Binding GenerateModel.DesktopMetric}"
+                                         Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"
+                                         wpf:TextFieldAssist.SuffixText="%"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Grid.Column="2"
+                                    Margin="30 0 0 0">
+                            <Image x:Name="ServerImage"
+                                   Width="50"
+                                   Height="50"
+                                   Margin="0 0 5 0"/>
+                            <StackPanel>
+                                <TextBlock Text="Рабочая метрика"
+                                           FontWeight="Medium"
+                                           FontSize="16"
+                                           Grid.Column="0"
+                                           Grid.Row="0"/>
+                                <TextBox Text="{Binding GenerateModel.WorkstationMetric}"
+                                         Width="auto"
+                                         FontWeight="Medium"
+                                         FontSize="16"
+                                         MaxLength="3"
+                                         wpf:TextFieldAssist.SuffixText="%"
+                                         />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#ffffff"
+                    Grid.Row="2"
+                    CornerRadius="10"
+                    Margin="0 20 0 0"
+                    Visibility="{Binding SettingsPanelVisibility}">
+                <StackPanel Orientation="Vertical"
+                            Margin="10 10 10 30">
+                    <TextBlock Text="Цена сборки"
+                               Margin="0 0 0 10"
+                               FontWeight="Medium"
+                               FontSize="20"/>
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 10"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel>
+                            <TextBlock Text="Минимальная цена"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.MinPrice}"
+                                     Width="auto"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="8"
+                                     wpf:TextFieldAssist.SuffixText="₽"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Средняя цена"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.AveragePrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="8"
+                                     wpf:TextFieldAssist.SuffixText="₽"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Максимальная цена"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.MaxPrice}"
+                                     Width="auto"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="8"
+                                     wpf:TextFieldAssist.SuffixText="₽"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0"
+                                    VerticalAlignment="Center">
+                            <CheckBox Content="Только товары которые в наличии"
+                                      IsChecked="{Binding GenerateModel.IsOnlyAvailableProducts}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      Padding="2.5 0 0 0"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"/>
+                            <CheckBox Content="Товары из DNS"
+                                      IsChecked="{Binding GenerateModel.IsDNSProducts}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      Padding="2.5 0 0 0"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"/>
+                            <CheckBox Content="Товары из Citilink"
+                                      IsChecked="{Binding GenerateModel.IsCitilinkProducts}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      Padding="2.5 0 0 0"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#ffffff"
+                    Grid.Row="3"
+                    CornerRadius="10"
+                    Margin="0 20 0 0"
+                    Visibility="{Binding SettingsPanelVisibility}">
+                <StackPanel Orientation="Vertical"
+                            Margin="10 10 10 30">
+                    <TextBlock Text="Веса модели"
+                               Margin="0 0 0 10"
+                               FontWeight="Medium"
+                               FontSize="20"/>
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 10"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                >
+                        <StackPanel>
+                            <TextBlock Text="Процессор"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightCPUMetric}"
+                                     Width="auto"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Видеокарта"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightGPUMetric}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Оперативная память"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightRAMMetric}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="SSD"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightSSDMetric}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="HDD"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightHDDMetric}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                Margin="0 25 0 0">
+                        <StackPanel>
+                            <TextBlock Text="Процессор"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightCPUPrice}"
+                                     Width="auto"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Видеокарта"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightGPUPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Оперативная память"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightRAMPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="SSD"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightSSDPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="HDD"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightHDDPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+                        
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Материнская плата"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightMotherboardPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Блок питания"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightPowerSupplyPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Корпус"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightCasePrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0">
+                            <TextBlock Text="Охлаждение"
+                                       FontWeight="Medium"
+                                       FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.WeightCaseFanPrice}"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="3"
+                                     wpf:TextFieldAssist.SuffixText="%"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#ffffff"
+                    Grid.Row="4"
+                    CornerRadius="10"
+                    Margin="0 20 0 0"
+                    Visibility="{Binding SettingsPanelVisibility}">
+                <StackPanel Orientation="Vertical"
+                            Margin="10 10 10 30">
+                    <TextBlock Text="Комплектующие в наличии"
+                               Margin="0 0 0 10"
+                               FontWeight="Medium"
+                               FontSize="20"/>
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 10"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="TypePartComboBox"
+                                  ItemsSource="{Binding AvailableTypes}"
+                                  wpf:ComboBoxAssist.ShowSelectedItem="True"
+                                  Width="auto"
+                                  SelectedItem="{Binding SelectedTypePart, Mode=TwoWay}">
+                        </ComboBox>
+
+                        <ComboBox Margin="10 0 0 0"
+                                  IsEditable="True"
+                                  ItemsSource="{Binding ChoisedTypeParts}"
+                                  SelectedItem="{Binding SelectedPart}"
+                                  DisplayMemberPath="GetSelectionString">
+                        </ComboBox>
+
+                        <Button Content="Добавить комплектующую"
+                                Margin="20 0 0 0"
+                                Background="#623ed0"
+                                BorderBrush="#623ed0"
+                                Command="{Binding AddPartCommand}"/>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding GenerateModel.SelectedParts}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 20 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Separator Height="1"
+                                                   Background="#9eb0c7"
+                                                   Margin="0 0 0 10"
+                                                   Grid.Row="0"
+                                                   Grid.ColumnSpan="10"/>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="0 0 10 5"
+                                                   Grid.Column="1"
+                                                   Grid.Row="1"/>
+
+                                    <Image Source="{Binding ImageSource}"
+                                           Width="100"
+                                           Height="100"
+                                           Grid.Column="2"
+                                           Grid.Row="1"/>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="10 0 0 5"
+                                                   Grid.Column="3"
+                                                   Grid.Row="1"/>
+
+                                    <StackPanel Margin="30 0 0 0"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="4"
+                                                Grid.Row="1">
+                                        <TextBlock Text="Название " 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#97989e" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 0 0"/>
+
+                                        <TextBlock FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518">
+                                            <Hyperlink NavigateUri="{Binding Part.Link}" 
+                                                       RequestNavigate="Hyperlink_RequestNavigate"
+                                                       TextDecorations="OverLine">
+                                                      <TextBlock Text="{Binding Part.Name}"
+                                                                  FontSize="20" 
+                                                                  FontWeight="Medium"
+                                                                  Foreground="#121518"
+                                                                  TextWrapping="Wrap"/>
+                                            </Hyperlink>
+                                        </TextBlock>
+
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0 10 0 0"
+                                                    Visibility="{Binding PartViewData.CitilinkPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <TextBlock FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"
+                                                       Margin="0 0 0 0">
+                                                <Hyperlink NavigateUri="{Binding PartViewData.CitilinkLink}" 
+                                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                                           TextDecorations="OverLine">
+                                                          <TextBlock Text="Citilink"
+                                                                      FontSize="20" 
+                                                                      FontWeight="Medium"
+                                                                      Foreground="#121518"
+                                                                      TextWrapping="Wrap"/>
+                                                </Hyperlink>
+                                            </TextBlock>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                            <TextBlock Text="{Binding PartViewData.CitilinkPrice, StringFormat=N0}"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"
+                                                       Margin="10 0 0 0"/>
+
+                                            <TextBlock Text="₽"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#97989e"/>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                            <TextBlock Text="{Binding PartViewData.CitilinkIsAvailable, Converter={StaticResource BooleanToAvailableShortViewDataConverter}}"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"/>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0 10 0 0"
+                                                    Visibility="{Binding PartViewData.DNSPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <TextBlock FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518">
+                                                <Hyperlink NavigateUri="{Binding PartViewData.DNSLink}" 
+                                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                                           TextDecorations="OverLine">
+                                                          <TextBlock Text="DNS"
+                                                                      FontSize="20" 
+                                                                      FontWeight="Medium"
+                                                                      Foreground="#121518"
+                                                                      TextWrapping="Wrap"/>
+                                                </Hyperlink>
+                                            </TextBlock>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                            <TextBlock Text="{Binding PartViewData.DNSPrice, StringFormat=N0}"
+                                                       FontSize="20" 
+                                                       Margin="10 0 0 0"
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"/>
+
+                                            <TextBlock Text="₽"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#97989e"/>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+
+                                            <TextBlock Text="{Binding PartViewData.DNSStatus, Converter={StaticResource DNSProductStatusShortViewConverter}}"
+                                                           FontSize="20" 
+                                                           Margin="5 0 0 0"
+                                                           FontWeight="Medium"
+                                                           Foreground="#121518"/>
+
+                                            <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                Margin="10 0 10 5"
+                                                Grid.Column="5"
+                                                Grid.Row="1"/>
+
+                                    <ItemsControl ItemsSource="{Binding Specifications}"
+                                                      Grid.Column="6"
+                                                      Grid.Row="1">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Width="auto"
+                                                           VerticalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="0 0 20 0"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center"
+                                                            Visibility="{Binding Value, Converter={StaticResource NullToVisibilityConverter}}">
+                                                    <TextBlock Text="{Binding Name, Converter={StaticResource AddColonConverter}}"
+                                                               FontSize="14" 
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#97989e"
+                                                               Margin="0 0 5 10"/>
+                                                    <TextBlock Text="{Binding Value}"
+                                                               FontSize="14" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#121518"/>
+                                                    <TextBlock Text="{Binding Measure}"
+                                                               Margin="5 0 0 0"
+                                                               FontSize="14" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#97989e"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="10 0 0 5"
+                                                   Grid.Column="7"
+                                                   Grid.Row="1"/>
+
+                                    <Button  Height="auto"
+                                             Margin="5 0 5 0"
+                                             Foreground="#6c7682"
+                                             Style="{StaticResource InfoButton}"
+                                             Grid.Column="8"
+                                             Grid.Row="1"
+                                             VerticalAlignment="Center" 
+                                             Command="{Binding DataContext.RemovePartCommand, 
+                                                       RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                             CommandParameter="{Binding}">
+                                        <icon:PackIconMaterial Kind="CloseOctagonOutline" 
+                                                   Width="25" 
+                                                   Style="{StaticResource InfoIcon}"
+                                                   Height="25"/>
+                                    </Button>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="0 0 0 5"
+                                                   Grid.Column="9"
+                                                   Grid.Row="1"/>
+
+                                    <Separator Height="1"
+                                                Background="#9eb0c7"
+                                                Margin="0 5 0 0"
+                                                Grid.Row="2"
+                                                Grid.ColumnSpan="11"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#ffffff"
+                    Grid.Row="5"
+                    CornerRadius="10"
+                    Margin="0 20 0 20">
+                <StackPanel Orientation="Vertical"
+                            Margin="10 10 10 10">
+                    <TextBlock Text="Конечные характеристики ПК"
+                               Margin="0 0 0 10"
+                               FontWeight="Medium"
+                               FontSize="20"
+                               Visibility="{Binding SettingsPanelVisibility}"/>
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 10"
+                               Visibility="{Binding SettingsPanelVisibility}"/>
+
+                    <StackPanel HorizontalAlignment="Left"
+                                Orientation="Horizontal"
+                                Visibility="{Binding SettingsPanelVisibility}"
+                                Margin="0 0 0 20">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel>
+                                <TextBlock Text="Количество SSD"
+                                   FontWeight="Medium"
+                                   FontSize="16"/>
+                                <TextBox Text="{Binding GenerateModel.SSDCount}"
+                                 Width="auto"
+                                 FontWeight="Medium"
+                                 FontSize="16"
+                                 MaxLength="1"
+                                 wpf:TextFieldAssist.SuffixText="шт."/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0 30 0 0">
+                                <TextBlock Text="Количество HDD"
+                                   FontWeight="Medium"
+                                   FontSize="16"/>
+                                <TextBox Text="{Binding GenerateModel.HDDCount}"
+                                 Width="auto"
+                                 FontWeight="Medium"
+                                 FontSize="16"
+                                 MaxLength="1"
+                                 wpf:TextFieldAssist.SuffixText="шт."/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical"
+                                    Margin="30 0 0 0">
+                            <StackPanel>
+                                <TextBlock Text="Общий объем SSD накопителей"
+                                   FontWeight="Medium"
+                                   FontSize="16"/>
+                                <TextBox Text="{Binding GenerateModel.SSDCount}"
+                                 Width="auto"
+                                 FontWeight="Medium"
+                                 FontSize="16"
+                                 MaxLength="5"
+                                 wpf:TextFieldAssist.SuffixText="ГБ"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0 30 0 0">
+                                <TextBlock Text="Общий объем HDD накопителей"
+                                   FontWeight="Medium"
+                                   FontSize="16"/>
+                                <TextBox Text="{Binding GenerateModel.HDDCount}"
+                                 Width="auto"
+                                 FontWeight="Medium"
+                                 FontSize="16"
+                                 MaxLength="5"
+                                 wpf:TextFieldAssist.SuffixText="ГБ"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0"
+                                    VerticalAlignment="Center">
+                            <CheckBox Content="Генерация охлаждения корпуса"
+                                      IsChecked="{Binding GenerateModel.IsGenerationCaseFan}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      Padding="2.5 0 0 0"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"/>
+                            <CheckBox Content="Блок питания с запасом мощности"
+                                      IsChecked="{Binding GenerateModel.IsPowerSupplyWithReserve}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      FontSize="16"
+                                      Padding="2.5 0 0 0"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"/>
+                            <CheckBox Content="Генерация корпуса"
+                                      IsChecked="{Binding GenerateModel.IsGenerationCase}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"
+                                      Padding="2.5 0 0 0"/>
+                            <CheckBox Content="Сборка под последующий апгрейд"
+                                      IsChecked="{Binding GenerateModel.IsUpgrade}"
+                                      Width="auto"
+                                      FontWeight="Medium"
+                                      FontSize="16"
+                                      Background="#623ed0"
+                                      BorderBrush="#623ed0"
+                                      Padding="2.5 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20 0 0 0"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="Количество оптимальных сборок"
+                                   FontWeight="Medium"
+                                   FontSize="16"/>
+                            <TextBox Text="{Binding GenerateModel.GenerationPCCount}"
+                                     Width="auto"
+                                     FontWeight="Medium"
+                                     FontSize="16"
+                                     MaxLength="2"
+                                     wpf:TextFieldAssist.SuffixText="шт."/>
+                        </StackPanel>
+
+                        <Button Content="Сгенерировать ПК"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                Command="{Binding GeneratePCCommand}"
+                                Background="#623ed0"
+                                BorderBrush="#623ed0"/>
+                    </StackPanel>
+
+                    <Separator Height="1"
+                                Background="#9eb0c7"
+                                Margin="0 0 10 0"/>
+
+                    <Button Height="25"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Foreground="#7b5cd6"
+                            Margin="0 1 10 1"
+                            Command="{Binding ChangeSettingsPanelVisibilityCommand}"
+                            Style="{StaticResource StandardCollapseIconButton}"
+                            >
+                        <icon:PackIconMaterial Kind="{Binding SettingsPanelIconKind}"
+                                                Width="15" 
+                                                Height="15"/>
+                    </Button>
+
+                    <Separator Height="1"
+                               Background="#9eb0c7"
+                               Margin="0 0 10 0"/>
+                </StackPanel>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding GeneratedParts}"
+                          Grid.Row="6"
+                          Margin="0 0 0 20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#ffffff"
+                                CornerRadius="10"
+                                Margin="0 20 0 20">
+                            <StackPanel Margin="10 10 10 10">
+                                <TextBlock Text="{Binding IndexString}"
+                                           FontWeight="Medium"
+                                           FontSize="20"
+                                           Margin="0 0 0 10"/>
+
+                                <Separator Height="1"
+                                           Background="#9eb0c7"
+                                           Margin="0 0 10 0"/>
+
+                                <ItemsControl ItemsSource="{Binding Parts}"
+                                              Visibility="{Binding PCVisibility}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0 20 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Separator Height="1"
+                                                   Background="#9eb0c7"
+                                                   Margin="0 0 10 10"
+                                                   Grid.Row="0"
+                                                   Grid.ColumnSpan="10"/>
+
+                                                <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="0 0 10 5"
+                                                   Grid.Column="1"
+                                                   Grid.Row="1"/>
+
+                                                <Image Source="{Binding ImageSource}"
+                                           Width="100"
+                                           Height="100"
+                                           Grid.Column="2"
+                                           Grid.Row="1"/>
+
+                                                <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="10 0 0 5"
+                                                   Grid.Column="3"
+                                                   Grid.Row="1"/>
+
+                                                <StackPanel Margin="30 0 0 0"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="4"
+                                                Grid.Row="1">
+                                                    <TextBlock Text="Название " 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#97989e" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 0 0"/>
+
+                                                    <TextBlock FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518">
+                                            <Hyperlink NavigateUri="{Binding Part.Link}" 
+                                                       RequestNavigate="Hyperlink_RequestNavigate"
+                                                       TextDecorations="OverLine">
+                                                      <TextBlock Text="{Binding Part.Name}"
+                                                                  FontSize="20" 
+                                                                  FontWeight="Medium"
+                                                                  Foreground="#121518"
+                                                                  TextWrapping="Wrap"/>
+                                            </Hyperlink>
+                                        </TextBlock>
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                    Margin="0 10 0 0"
+                                                    Visibility="{Binding PartViewData.CitilinkPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                                                        <TextBlock FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"
+                                                       Margin="0 0 0 0">
+                                                <Hyperlink NavigateUri="{Binding PartViewData.CitilinkLink}" 
+                                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                                           TextDecorations="OverLine">
+                                                          <TextBlock Text="Citilink"
+                                                                      FontSize="20" 
+                                                                      FontWeight="Medium"
+                                                                      Foreground="#121518"
+                                                                      TextWrapping="Wrap"/>
+                                                </Hyperlink>
+                                            </TextBlock>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                                        <TextBlock Text="{Binding PartViewData.CitilinkPrice, StringFormat=N0}"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"
+                                                       Margin="10 0 0 0"/>
+
+                                                        <TextBlock Text="₽"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#97989e"/>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                                        <TextBlock Text="{Binding PartViewData.CitilinkIsAvailable, Converter={StaticResource BooleanToAvailableShortViewDataConverter}}"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"/>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                    Margin="0 10 0 0"
+                                                    Visibility="{Binding PartViewData.DNSPrice, Converter={StaticResource NullToVisibilityConverter}}">
+                                                        <TextBlock FontSize="20" 
+                                                   FontWeight="Medium"
+                                                   Foreground="#121518">
+                                                <Hyperlink NavigateUri="{Binding PartViewData.DNSLink}" 
+                                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                                           TextDecorations="OverLine">
+                                                          <TextBlock Text="DNS"
+                                                                      FontSize="20" 
+                                                                      FontWeight="Medium"
+                                                                      Foreground="#121518"
+                                                                      TextWrapping="Wrap"/>
+                                                </Hyperlink>
+                                            </TextBlock>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"
+                                                       />
+
+                                                        <TextBlock Text="{Binding PartViewData.DNSPrice, StringFormat=N0}"
+                                                       FontSize="20" 
+                                                       Margin="10 0 0 0"
+                                                       FontWeight="Medium"
+                                                       Foreground="#121518"/>
+
+                                                        <TextBlock Text="₽"
+                                                       Margin="5 0 0 0"
+                                                       FontSize="20" 
+                                                       FontWeight="Medium"
+                                                       Foreground="#97989e"/>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+
+                                                        <TextBlock Text="{Binding PartViewData.DNSStatus, Converter={StaticResource DNSProductStatusShortViewConverter}}"
+                                                           FontSize="20" 
+                                                           Margin="5 0 0 0"
+                                                           FontWeight="Medium"
+                                                           Foreground="#121518"/>
+
+                                                        <Rectangle Width="1" 
+                                                       Fill="#9eb0c7" 
+                                                       Margin="10 0 0 0"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <Rectangle Width="1" Fill="#9eb0c7" 
+                                                Margin="10 0 10 5"
+                                                Grid.Column="5"
+                                                Grid.Row="1"/>
+
+                                                <ItemsControl ItemsSource="{Binding Specifications}"
+                                                      Grid.Column="6"
+                                                      Grid.Row="1">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel Width="auto"
+                                                           VerticalAlignment="Center"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal"
+                                                            Margin="0 0 20 0"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center"
+                                                            Visibility="{Binding Value, Converter={StaticResource NullToVisibilityConverter}}">
+                                                                <TextBlock Text="{Binding Name, Converter={StaticResource AddColonConverter}}"
+                                                               FontSize="14" 
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#97989e"
+                                                               Margin="0 0 5 10"/>
+                                                                <TextBlock Text="{Binding Value}"
+                                                               FontSize="14" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#121518"/>
+                                                                <TextBlock Text="{Binding Measure}"
+                                                               Margin="5 0 0 0"
+                                                               FontSize="14" 
+                                                               FontWeight="Medium"
+                                                               Foreground="#97989e"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+
+                                                <Separator Height="1"
+                                                Background="#9eb0c7"
+                                                Margin="0 5 10 0"
+                                                Grid.Row="2"
+                                                Grid.ColumnSpan="11"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Text="Статистика"
+                                           FontWeight="Medium"
+                                           FontSize="20"
+                                           Margin="0 10 0 10"/>
+
+                                <Separator Height="1"
+                                           Background="#9eb0c7"
+                                           Margin="0 0 10 0"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            Margin="0 5 0 5">
+                                    <StackPanel Orientation="Horizontal"
+                                            Margin="0 0 0 0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="Оптимальная цена сборки:"
+                                                FontSize="20" 
+                                                FontWeight="SemiBold"
+                                                Foreground="#97989e"
+                                                Margin="0 0 5 0"/>
+                                        <TextBlock Text="{Binding Stats.Price}"
+                                                FontSize="20" 
+                                                FontWeight="Medium"
+                                                Foreground="#121518"/>
+                                        <TextBlock Text="₽"
+                                                Margin="5 0 0 0"
+                                                FontSize="20" 
+                                                FontWeight="Medium"
+                                                Foreground="#97989e"/>
+                                    </StackPanel>
+                                    
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="10 0 10 0"/>
+                                    
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0 0 0 0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="Общий объем HDD :"
+                                                    FontSize="20" 
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#97989e"
+                                                    Margin="0 0 5 0"/>
+                                        <TextBlock Text="{Binding Stats.HDD}"
+                                                    FontSize="20" 
+                                                    FontWeight="Medium"
+                                                    Foreground="#121518"/>
+                                        <TextBlock Text="ГБ"
+                                                    Margin="5 0 0 0"
+                                                    FontSize="20" 
+                                                    FontWeight="Medium"
+                                                    Foreground="#97989e"/>
+                                    </StackPanel>
+
+                                    <Rectangle Width="1" Fill="#9eb0c7" 
+                                                   Margin="10 0 10 0"/>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0 0 0 0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="Общий объем SSD:"
+                                                    FontSize="20" 
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#97989e"
+                                                    Margin="0 0 5 0"/>
+                                        <TextBlock Text="{Binding Stats.SSD}"
+                                                    FontSize="20" 
+                                                    FontWeight="Medium"
+                                                    Foreground="#121518"/>
+                                        <TextBlock Text="ГБ"
+                                                    Margin="5 0 0 0"
+                                                    FontSize="20" 
+                                                    FontWeight="Medium"
+                                                    Foreground="#97989e"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Separator Height="1"
+                                           Background="#9eb0c7"
+                                           Margin="0 0 10 0"/>
+
+                                <Button Height="25"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch"
+                                    Foreground="#7b5cd6"
+                                    Margin="0 1 10 1"
+                                    Command="{Binding ChangePCVisibilityCommand}"
+                                    Style="{StaticResource StandardCollapseIconButton}"
+                                    >
+                                <icon:PackIconMaterial Kind="{Binding PCIconKind}"
+                                                        Width="15" 
+                                                        Height="15"/>
+                                </Button>
+
+                                <Separator Height="1"
+                                           Background="#9eb0c7"
+                                           Margin="0 0 10 0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border Background="#ffffff"
+                    Grid.Row="7"
+                    CornerRadius="10"
+                    Margin="0 20 0 20">
+                <!--тут сообщение о работе модели-->
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

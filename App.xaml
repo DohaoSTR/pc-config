@@ -15,11 +15,13 @@
                 <ResourceDictionary Source="View/Styles/CollapseMenuIconButton.xaml"/>
                 <ResourceDictionary Source="View/Styles/DataGridStyles.xaml"/>
                 <ResourceDictionary Source="View/Styles/PagingButton.xaml"/>
+                <ResourceDictionary Source="View/Styles/InfoButton.xaml"/>
+                <ResourceDictionary Source="View/Styles/StandardCollapseIconButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type Window}"
                    x:Key="StandardWindow">
-                <Setter Property="Icon" Value="icon.ico" />
+                <Setter Property="Icon" Value="icon.ico"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

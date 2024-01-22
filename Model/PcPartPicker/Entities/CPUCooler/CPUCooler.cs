@@ -10,34 +10,34 @@ namespace PCConfig.Model.PcPartPicker.Entities.CPUCooler
         public int Id { get; set; }
 
         [Column("model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Column("height")]
-        public double Height { get; set; }
+        public double? Height { get; set; }
 
         [Column("water_cooled")]
-        public double WaterCooled { get; set; }
+        public double? WaterCooled { get; set; }
 
         [Column("fan")]
-        public string Fan { get; set; }
+        public string? Fan { get; set; }
 
         [Column("color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
 
         [Column("bearing")]
-        public string Bearing { get; set; }
+        public string? Bearing { get; set; }
 
         [Column("min_rpm")]
-        public double MinRpm { get; set; }
+        public double? MinRpm { get; set; }
 
         [Column("max_rpm")]
-        public double MaxRpm { get; set; }
+        public double? MaxRpm { get; set; }
 
         [Column("min_noise_level")]
-        public double MinNoiseLevel { get; set; }
+        public double? MinNoiseLevel { get; set; }
 
         [Column("max_noise_level")]
-        public double MaxNoiseLevel { get; set; }
+        public double? MaxNoiseLevel { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

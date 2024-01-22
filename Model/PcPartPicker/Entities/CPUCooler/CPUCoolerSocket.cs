@@ -10,7 +10,7 @@ namespace PCConfig.Model.PcPartPicker.Entities.CPUCooler
         public int Id { get; set; }
 
         [Column("socket")]
-        public string Socket { get; set; }
+        public string? Socket { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

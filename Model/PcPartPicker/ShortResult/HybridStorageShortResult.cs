@@ -18,6 +18,14 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
 
         public string? HybridSSDCacheMeasure { get; set; }
 
+
+        public int? GamingPercentage { get; set; }
+
+        public int? DesktopPercentage { get; set; }
+
+        public int? WorkstationPercentage { get; set; }
+
+
         public Tuple<string, string?> Parse(object value)
         {
             if (value != null)

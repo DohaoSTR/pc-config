@@ -10,10 +10,10 @@ namespace PCConfig.Model.PcPartPicker.Entities.GPU
         public int Id { get; set; }
 
         [Column("ways_count")]
-        public int WaysCount { get; set; }
+        public int? WaysCount { get; set; }
 
         [Column("name_technology")]
-        public string NameTechnology { get; set; }
+        public string? NameTechnology { get; set; }
 
         [Column("part_id")]
         public int PartId { get; set; }

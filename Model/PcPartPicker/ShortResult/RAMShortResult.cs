@@ -22,6 +22,14 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
 
         public int? Tras { get; set; }
 
+
+        public int? GamingPercentage { get; set; }
+
+        public int? DesktopPercentage { get; set; }
+
+        public int? WorkstationPercentage { get; set; }
+
+
         public override IEnumerable<ShortSpecification> GetSpecificationList()
         {
             MeasureConverter gbConverter = new MeasureConverter();

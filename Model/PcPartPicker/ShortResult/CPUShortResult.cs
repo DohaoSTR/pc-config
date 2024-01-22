@@ -18,6 +18,14 @@ namespace PCConfig.Model.PcPartPicker.ShortViewData
 
         public string? Socket { get; set; }
 
+
+        public int? GamingPercentage { get; set; }
+
+        public int? DesktopPercentage { get; set; }
+
+        public int? WorkstationPercentage { get; set; }
+
+
         public override IEnumerable<ShortSpecification> GetSpecificationList()
         {
             IntegratedGraphicsConverter integratedGraphicsConverter = new IntegratedGraphicsConverter();
