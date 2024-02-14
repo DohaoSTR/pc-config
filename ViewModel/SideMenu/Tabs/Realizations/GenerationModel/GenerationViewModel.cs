@@ -154,26 +154,21 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.GenerationModel
 
             GenerateModel = new GenerateModel();
 
-            GenerateModel.WeightCPUMetric = 100;
-            GenerateModel.WeightGPUMetric = 100;
-            GenerateModel.WeightRAMMetric = 100;
-            GenerateModel.WeightSSDMetric = 100;
-            GenerateModel.WeightHDDMetric = 100;
+            GenerateModel.WeightCPU = 100;
+            GenerateModel.WeightGPU = 100;
+            GenerateModel.WeightRAM = 100;
 
-            GenerateModel.WeightCPUPrice = 100;
-            GenerateModel.WeightGPUPrice = 100;
-            GenerateModel.WeightRAMPrice = 100;
-            GenerateModel.WeightSSDPrice = 100;
-            GenerateModel.WeightHDDPrice = 100;
+            GenerateModel.WeightSSD = 75;
+            GenerateModel.WeightHDD = 75;
+            GenerateModel.WeightMotherboard = 100;
 
-            GenerateModel.WeightMotherboardPrice = 100;
-            GenerateModel.WeightPowerSupplyPrice = 100;
-            GenerateModel.WeightCasePrice = 100;
-            GenerateModel.WeightCaseFanPrice = 100;
+            GenerateModel.WeightPowerSupply = 75;
+            GenerateModel.WeightCase = 50;
+            GenerateModel.WeightCaseFan = 50;
 
-            GenerateModel.GameMetric = 100;
+            GenerateModel.GameMetric = 75;
             GenerateModel.DesktopMetric = 100;
-            GenerateModel.WorkstationMetric = 100;
+            GenerateModel.WorkstationMetric = 75;
 
             GenerateModel.AveragePrice = 40000;
             GenerateModel.MinPrice = 15000;
@@ -196,7 +191,7 @@ namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.GenerationModel
             GenerateModel.GenerationPCCount = 1;
 
             GenerateModel.IsGenerationCase = true;
-            GenerateModel.IsGenerationCaseFan = true;
+            GenerateModel.IsGenerationCaseFan = false;
             GenerateModel.IsPowerSupplyWithReserve = true;
 
             ResolutionValues = Enum.GetValues(typeof(Resolution)).Cast<Resolution>().ToArray();

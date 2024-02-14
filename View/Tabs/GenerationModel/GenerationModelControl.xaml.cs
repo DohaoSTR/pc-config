@@ -37,6 +37,20 @@ namespace PCConfig.View.Tabs.GenerationModel
             DataContext = model;
         }
 
+        private void OpenSmallPopupButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReviewWindow reviewWindow = new ReviewWindow();
+            reviewWindow.Closed += ReviewWindow_Closed;
+            reviewWindow.Show();
+
+            ReviewButton.IsEnabled = false;
+        }
+
+        private void ReviewWindow_Closed(object? sender, EventArgs e)
+        {
+            ReviewButton.IsEnabled = true;
+        }
+
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
@@ -62,6 +76,5 @@ namespace PCConfig.View.Tabs.GenerationModel
                 infoPopup.IsOpen = true;
             }
         }
-
     }
 }

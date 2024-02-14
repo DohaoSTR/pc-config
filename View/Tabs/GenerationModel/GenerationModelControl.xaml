@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:PCConfig.Model.Converters" 
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800">
@@ -227,7 +228,7 @@
                                                    Height="20"/>
                         </Button>
                         
-                        <Popup Name="infoPopup" Placement="Bottom" StaysOpen="False" IsOpen="False">
+                        <Popup x:Name="infoPopup" Placement="Bottom" StaysOpen="False" IsOpen="False">
                             <Border BorderBrush="Gray" 
                                     BorderThickness="1" 
                                     Background="White" 
@@ -407,8 +408,8 @@
                     Margin="0 20 0 0"
                     Visibility="{Binding SettingsPanelVisibility}">
                 <StackPanel Orientation="Vertical"
-                            Margin="10 10 10 30">
-                    <TextBlock Text="Веса модели"
+                            Margin="10 10 10 35">
+                    <TextBlock Text="Влияние комплектующих на итоговую модель"
                                Margin="0 0 0 10"
                                FontWeight="Medium"
                                FontSize="20"/>
@@ -417,12 +418,12 @@
                                Margin="0 0 10 10"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
-                                >
+                                Margin="0 0 0 30">
                         <StackPanel>
                             <TextBlock Text="Процессор"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightCPUMetric}"
+                            <TextBox Text="{Binding GenerateModel.WeightCPU}"
                                      Width="auto"
                                      FontWeight="Medium"
                                      FontSize="16"
@@ -434,42 +435,42 @@
                             <TextBlock Text="Видеокарта"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightGPUMetric}"
+                            <TextBox Text="{Binding GenerateModel.WeightGPU}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
                                      wpf:TextFieldAssist.SuffixText="%"/>
                         </StackPanel>
-
 
                         <StackPanel Margin="20 0 0 0">
                             <TextBlock Text="Оперативная память"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightRAMMetric}"
+                            <TextBox Text="{Binding GenerateModel.WeightRAM}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
                                      wpf:TextFieldAssist.SuffixText="%"/>
                         </StackPanel>
 
-
-                        <StackPanel Margin="20 0 0 0">
+                        <StackPanel Margin="20 0 0 0"
+                                    Width="50">
                             <TextBlock Text="SSD"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightSSDMetric}"
+                            <TextBox Text="{Binding GenerateModel.WeightSSD}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
                                      wpf:TextFieldAssist.SuffixText="%"/>
                         </StackPanel>
 
-                        <StackPanel Margin="20 0 0 0">
+                        <StackPanel Margin="20 0 0 0"
+                                    Width="50">
                             <TextBlock Text="HDD"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightHDDMetric}"
+                            <TextBox Text="{Binding GenerateModel.WeightHDD}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
@@ -478,70 +479,12 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
-                                Margin="0 25 0 0">
-                        <StackPanel>
-                            <TextBlock Text="Процессор"
-                                       FontWeight="Medium"
-                                       FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightCPUPrice}"
-                                     Width="auto"
-                                     FontWeight="Medium"
-                                     FontSize="16"
-                                     MaxLength="3"
-                                     wpf:TextFieldAssist.SuffixText="%"/>
-                        </StackPanel>
-
-                        <StackPanel Margin="20 0 0 0">
-                            <TextBlock Text="Видеокарта"
-                                       FontWeight="Medium"
-                                       FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightGPUPrice}"
-                                     FontWeight="Medium"
-                                     FontSize="16"
-                                     MaxLength="3"
-                                     wpf:TextFieldAssist.SuffixText="%"/>
-                        </StackPanel>
-
-
-                        <StackPanel Margin="20 0 0 0">
-                            <TextBlock Text="Оперативная память"
-                                       FontWeight="Medium"
-                                       FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightRAMPrice}"
-                                     FontWeight="Medium"
-                                     FontSize="16"
-                                     MaxLength="3"
-                                     wpf:TextFieldAssist.SuffixText="%"/>
-                        </StackPanel>
-
-
-                        <StackPanel Margin="20 0 0 0">
-                            <TextBlock Text="SSD"
-                                       FontWeight="Medium"
-                                       FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightSSDPrice}"
-                                     FontWeight="Medium"
-                                     FontSize="16"
-                                     MaxLength="3"
-                                     wpf:TextFieldAssist.SuffixText="%"/>
-                        </StackPanel>
-
-                        <StackPanel Margin="20 0 0 0">
-                            <TextBlock Text="HDD"
-                                       FontWeight="Medium"
-                                       FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightHDDPrice}"
-                                     FontWeight="Medium"
-                                     FontSize="16"
-                                     MaxLength="3"
-                                     wpf:TextFieldAssist.SuffixText="%"/>
-                        </StackPanel>
-                        
-                        <StackPanel Margin="20 0 0 0">
+                                Margin="0 0 0 0">
+                        <StackPanel Margin="0 0 0 0">
                             <TextBlock Text="Материнская плата"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightMotherboardPrice}"
+                            <TextBox Text="{Binding GenerateModel.WeightMotherboard}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
@@ -552,7 +495,7 @@
                             <TextBlock Text="Блок питания"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightPowerSupplyPrice}"
+                            <TextBox Text="{Binding GenerateModel.WeightPowerSupply}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
@@ -563,7 +506,7 @@
                             <TextBlock Text="Корпус"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightCasePrice}"
+                            <TextBox Text="{Binding GenerateModel.WeightCase}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
@@ -571,10 +514,10 @@
                         </StackPanel>
 
                         <StackPanel Margin="20 0 0 0">
-                            <TextBlock Text="Охлаждение"
+                            <TextBlock Text="Охлаждение ПК"
                                        FontWeight="Medium"
                                        FontSize="16"/>
-                            <TextBox Text="{Binding GenerateModel.WeightCaseFanPrice}"
+                            <TextBox Text="{Binding GenerateModel.WeightCaseFan}"
                                      FontWeight="Medium"
                                      FontSize="16"
                                      MaxLength="3"
@@ -927,7 +870,7 @@
                                 <TextBlock Text="Общий объем SSD накопителей"
                                    FontWeight="Medium"
                                    FontSize="16"/>
-                                <TextBox Text="{Binding GenerateModel.SSDCount}"
+                                <TextBox Text="{Binding GenerateModel.SSDMemory}"
                                  Width="auto"
                                  FontWeight="Medium"
                                  FontSize="16"
@@ -939,7 +882,7 @@
                                 <TextBlock Text="Общий объем HDD накопителей"
                                    FontWeight="Medium"
                                    FontSize="16"/>
-                                <TextBox Text="{Binding GenerateModel.HDDCount}"
+                                <TextBox Text="{Binding GenerateModel.HDDMemory}"
                                  Width="auto"
                                  FontWeight="Medium"
                                  FontSize="16"
@@ -968,14 +911,6 @@
                                       BorderBrush="#623ed0"/>
                             <CheckBox Content="Генерация корпуса"
                                       IsChecked="{Binding GenerateModel.IsGenerationCase}"
-                                      Width="auto"
-                                      FontWeight="Medium"
-                                      FontSize="16"
-                                      Background="#623ed0"
-                                      BorderBrush="#623ed0"
-                                      Padding="2.5 0 0 0"/>
-                            <CheckBox Content="Сборка под последующий апгрейд"
-                                      IsChecked="{Binding GenerateModel.IsUpgrade}"
                                       Width="auto"
                                       FontWeight="Medium"
                                       FontSize="16"
@@ -1309,10 +1244,10 @@
                                                 FontWeight="Medium"
                                                 Foreground="#97989e"/>
                                     </StackPanel>
-                                    
+
                                     <Rectangle Width="1" Fill="#9eb0c7" 
                                                    Margin="10 0 10 0"/>
-                                    
+
                                     <StackPanel Orientation="Horizontal"
                                                 Margin="0 0 0 0"
                                                 HorizontalAlignment="Left"
@@ -1387,7 +1322,14 @@
                     Grid.Row="7"
                     CornerRadius="10"
                     Margin="0 20 0 20">
-                <!--тут сообщение о работе модели-->
+                <Button Content="Сформировать отзыв"
+                        x:Name="ReviewButton"
+                        Click="OpenSmallPopupButton_Click"
+                        BorderBrush="#623ed0"
+                        Background="#623ed0"
+                        FontSize="16" 
+                        FontWeight="Medium"
+                        />
             </Border>
         </Grid>
     </ScrollViewer>

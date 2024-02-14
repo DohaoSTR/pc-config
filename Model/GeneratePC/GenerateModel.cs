@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using PCConfig.Model.PcPartPicker.Entities.InternalDrive;
+using PCConfig.Model.PcPartPicker.Entities.CPUCooler;
+using PCConfig.Model.PcPartPicker.Entities.PowerSupply;
 
 namespace PCConfig.Model.GeneratePC
 {
@@ -16,22 +18,15 @@ namespace PCConfig.Model.GeneratePC
         public int SSDMemory { get; set; }
         public int HDDMemory { get; set; }
 
-        public int WeightCPUMetric { get; set; }
-        public int WeightGPUMetric { get; set; }
-        public int WeightRAMMetric { get; set; }
-        public int WeightSSDMetric { get; set; }
-        public int WeightHDDMetric { get; set; }
-
-        public int WeightCPUPrice { get; set; }
-        public int WeightGPUPrice { get; set; }
-        public int WeightRAMPrice { get; set; }
-        public int WeightSSDPrice { get; set; }
-        public int WeightHDDPrice { get; set; }
-
-        public int WeightMotherboardPrice { get; set; }
-        public int WeightPowerSupplyPrice { get; set; }
-        public int WeightCasePrice { get; set; }
-        public int WeightCaseFanPrice { get; set; }
+        public int WeightCPU { get; set; }
+        public int WeightGPU { get; set; }
+        public int WeightRAM { get; set; }
+        public int WeightSSD { get; set; }
+        public int WeightHDD { get; set; }
+        public int WeightMotherboard { get; set; }
+        public int WeightPowerSupply { get; set; }
+        public int WeightCase { get; set; }
+        public int WeightCaseFan { get; set; }
 
         public ObservableCollection<GameViewModel> Games { get; set; }
 
@@ -62,34 +57,80 @@ namespace PCConfig.Model.GeneratePC
         public bool IsGenerationCaseFan { get; set; }
         public bool IsPowerSupplyWithReserve { get; set; }
         public bool IsGenerationCase { get; set; }
-        public bool IsUpgrade { get; set; }
 
         public int GenerationPCCount { get; set; }
+
 
         public ObservableCollection<GeneratedPC> GeneratePC()
         {
             ObservableCollection<GeneratedPC> data = [];
 
             PCPartPickerContext context = new PCPartPickerContext();
-            PartShortData cpu1 = context.GetCPUShortData().ToList()[113];
-            PartShortData gpu1 = context.GetGPUShortData().ToList()[193];
-            PartShortData motherboard1 = context.GetMotherboardShortData().ToList()[14];
-            PartShortData ram1 = context.GetRAMShortData().ToList()[37];
-            PartShortData powerSupply1 = context.GetPowerSupplyShortData().ToList()[7];
-            PartShortData case1 = context.GetCaseShortData().ToList()[1];
-            PartShortData ssd1 = context.GetSSDShortData().ToList()[38];
-            PartShortData hdd1 = context.GetHDDShortData().ToList()[226];
-            PartShortData cpuCooler1 = context.GetCPUCoolerShortData().ToList()[10];
-            ObservableCollection<PartShortData> parts1 = new ObservableCollection<PartShortData> { cpu1, gpu1, ram1, ssd1, hdd1, motherboard1, powerSupply1, case1, cpuCooler1 };
 
-            GeneratedPC pc1 = new GeneratedPC() 
-            { 
-                Parts = parts1,
-                IndexString = "Сборка 1",
-                Stats = GetPCStats(parts1)
-            };
+            List<PartShortData> cpus = context.GetCPUShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null) && 
+            (x.DesktopPercentage != null && x.WorkstationPercentage != null && x.GamingPercentage != null)).ToList();
+            List<PartShortData> gpus = context.GetGPUShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null) &&
+            (x.DesktopPercentage != null && x.WorkstationPercentage != null && x.GamingPercentage != null)).ToList();
+            List<PartShortData> rams = context.GetRAMShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null) &&
+            (x.DesktopPercentage != null && x.WorkstationPercentage != null && x.GamingPercentage != null)).ToList();
+            List<PartShortData> ssds = context.GetSSDShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null) &&
+            (x.DesktopPercentage != null && x.WorkstationPercentage != null && x.GamingPercentage != null)).ToList();
+            List<PartShortData> hdds = context.GetHDDShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null) &&
+            (x.DesktopPercentage != null && x.WorkstationPercentage != null && x.GamingPercentage != null)).ToList();
 
-            data.Add(pc1);
+            List<PartShortData> motherboards = context.GetMotherboardShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
+            List<PartShortData> powerSupplys = context.GetPowerSupplyShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
+
+            List<PartShortData> cases = new List<PartShortData>();
+            if (IsGenerationCase == true)
+            {
+                cases = context.GetCaseShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
+            }
+
+            List<PartShortData> caseFans = new List<PartShortData>();
+            if (IsGenerationCaseFan == true)
+            {
+                caseFans = context.GetCaseFanShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
+            }
+
+            List<PartShortData> cpuCoolers = context.GetCPUCoolerShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
+
+            for (int i = 1; i < GenerationPCCount + 1; i++)
+            {
+                PartShortData cpu = GetHardware(cpus);
+                PartShortData gpu = GetHardware(gpus);
+                PartShortData ram = GetHardware(rams);
+                PartShortData ssd = GetHardware(ssds);
+                PartShortData hdd = GetHardware(hdds);
+
+                PartShortData motherboard = GetHardware(motherboards);
+                PartShortData powerSupply = GetHardware(powerSupplys);
+                PartShortData case1 = GetHardware(cases);
+                PartShortData caseFan = GetHardware(caseFans);
+                PartShortData cpuCooler = GetHardware(cpuCoolers);
+
+                ObservableCollection<PartShortData> parts1 = new ObservableCollection<PartShortData>();
+                if (caseFan != null)
+                {
+                    parts1.Add(caseFan);
+                }
+
+                if (case1 != null)
+                {
+                    parts1.Add(case1);
+                }
+
+                parts1 = new ObservableCollection<PartShortData> { cpu, gpu, ram, ssd, hdd, motherboard, powerSupply, cpuCooler };
+
+                GeneratedPC pc1 = new GeneratedPC()
+                {
+                    Parts = parts1,
+                    IndexString = "Сборка " + i.ToString(),
+                    Stats = GetPCStats(parts1)
+                };
+
+                data.Add(pc1);
+            }
 
             return data;
         }
@@ -161,6 +202,21 @@ namespace PCConfig.Model.GeneratePC
         }
 
         #region INotifyPropertyChanged Implementation
+
+        public PartShortData GetHardware(List<PartShortData> parts)
+        {
+            if (parts.Count > 0)
+            {
+                Random random = new Random();
+                int randomIndex = random.Next(0, parts.Count);
+                return parts[randomIndex];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

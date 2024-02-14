@@ -98,7 +98,6 @@ namespace PCConfig
             {
                 { new DropOutSideMenuItemViewModel("Комплектующие", "Grid", parts.Keys, SideMenuItemLocationType.Top), null },
                 { new SideMenuItemViewModel("Игровые данные", "ControllerClassic", SideMenuItemLocationType.Top), gameDataStrategy },
-                { new SideMenuItemViewModel("Конфигуратор", "Layers", SideMenuItemLocationType.Top), new ConfiguratorTabStrategy() },
                 { new SideMenuItemViewModel("Генерация ПК", "Cogs", SideMenuItemLocationType.Top), new GenerationAssemblyTabStrategy() },
                 { new SideMenuItemViewModel("Настройки аккаунта", "AccountBox", SideMenuItemLocationType.Bottom, true), accountStrategy }
             };
