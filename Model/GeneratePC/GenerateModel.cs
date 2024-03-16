@@ -4,12 +4,7 @@ using PCConfig.Model.UserBenchmark;
 using PCConfig.ViewModel.SideMenu.Tabs.Realizations.GenerationModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
-using System.Windows;
-using GalaSoft.MvvmLight.Command;
 using PCConfig.Model.PcPartPicker.Entities.InternalDrive;
-using PCConfig.Model.PcPartPicker.Entities.CPUCooler;
-using PCConfig.Model.PcPartPicker.Entities.PowerSupply;
 
 namespace PCConfig.Model.GeneratePC
 {
@@ -60,7 +55,7 @@ namespace PCConfig.Model.GeneratePC
 
         public int GenerationPCCount { get; set; }
 
-
+        // now generate random PC
         public ObservableCollection<GeneratedPC> GeneratePC()
         {
             ObservableCollection<GeneratedPC> data = [];
@@ -81,13 +76,13 @@ namespace PCConfig.Model.GeneratePC
             List<PartShortData> motherboards = context.GetMotherboardShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
             List<PartShortData> powerSupplys = context.GetPowerSupplyShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
 
-            List<PartShortData> cases = new List<PartShortData>();
+            List<PartShortData> cases = new();
             if (IsGenerationCase == true)
             {
                 cases = context.GetCaseShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();
             }
 
-            List<PartShortData> caseFans = new List<PartShortData>();
+            List<PartShortData> caseFans = new();
             if (IsGenerationCaseFan == true)
             {
                 caseFans = context.GetCaseFanShortData().Where(x => (x.DNSLink != null || x.CitilinkLink != null)).ToList();

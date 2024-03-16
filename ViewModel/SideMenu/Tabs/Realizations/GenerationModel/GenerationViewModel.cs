@@ -11,11 +11,6 @@ using System.Windows.Input;
 
 namespace PCConfig.ViewModel.SideMenu.Tabs.Realizations.GenerationModel
 {
-    // до 10 ssd
-    // до 10 hdd
-    // до 10 охлаждений
-    // до 10 оперативных плашек
-    // до 2 видеокарт
     public class GenerationViewModel : INotifyPropertyChanged
     {
         public GenerateModel GenerateModel { get; set; }
