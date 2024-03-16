@@ -51,11 +51,7 @@ namespace PCConfig.ViewModel.Access
             }
         }
 
-        public RegistrationViewModel()
-        {
-            Email = "muzalevskij.evgenij@mail.ru";
-            Password = "1234#$2aBda";
-        }
+        public RegistrationViewModel() { }
 
         public RegistrationViewModel(string email, string password)
         {
